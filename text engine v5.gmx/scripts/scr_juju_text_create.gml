@@ -44,6 +44,7 @@ with( instance_create( _x, _y, _obj ) ) {
     ds_map_add(      text_json, "line height"   , _line_height );
     ds_map_add(      text_json, "halign"        , _halign );
     ds_map_add(      text_json, "valign"        , _valign );
+    ds_map_add(      text_json, "length"        , 0 );
     
     var _text_x = 0;
     var _text_y = 0;
@@ -80,6 +81,7 @@ with( instance_create( _x, _y, _obj ) ) {
                     _skip = true;
                     _text_font = _def_font;
                     _text_colour = _def_colour;
+                    draw_set_font( _text_font );
                     
                 } else {
                     
@@ -185,7 +187,7 @@ with( instance_create( _x, _y, _obj ) ) {
             ds_map_add( _map, "width"   , _substr_width );
             ds_map_add( _map, "height"  , _substr_height );
             ds_map_add( _map, "string"  , _substr );
-            ds_map_add( _map, "length"  , _substr_length );
+            ds_map_add( _map, "length"  , _substr_length + 1 ); //Include the space!
             ds_map_add( _map, "instance", _substr_instance );
             ds_map_add( _map, "object"  , _substr_object );
             ds_map_add( _map, "font"    , _text_font );
@@ -194,8 +196,11 @@ with( instance_create( _x, _y, _obj ) ) {
             ds_list_add( _line_list, _map );
             ds_list_mark_as_map( _line_list, ds_list_size( _line_list ) - 1 );
             
-            _text_x += _substr_width + _space_width;
-            if ( _substr_object != noone ) _text_x -= _space_width;
+            if ( _substr_object == noone ) {
+                _text_x += _substr_width + _space_width;
+            } else {
+                _text_x += _substr_width;
+            }
             
         }
         

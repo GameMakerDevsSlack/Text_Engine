@@ -19,7 +19,7 @@
   </scripts>
   <fonts name="fonts">
     <font>fonts\fnt_arial_large</font>
-    <font>fonts\fnt_arial_medium</font>
+    <font>fonts\fnt_tnr_larger</font>
   </fonts>
   <objects name="objects">
     <object>objects\obj_create</object>
