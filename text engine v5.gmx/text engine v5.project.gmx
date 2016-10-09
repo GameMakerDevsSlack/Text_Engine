@@ -18,7 +18,7 @@
     <script>scripts\scr_juju_text_destroy_instances.gml</script>
   </scripts>
   <fonts name="fonts">
-    <font>fonts\fnt_arial_large</font>
+    <font>fonts\fnt_verdana_large</font>
     <font>fonts\fnt_tnr_larger</font>
   </fonts>
   <objects name="objects">
@@ -29,8 +29,10 @@
   <rooms name="rooms">
     <room>rooms\rm_main</room>
   </rooms>
-  <constants number="1">
+  <constants number="3">
     <constant name="DEFAULT">""</constant>
+    <constant name="fa_center_left">3</constant>
+    <constant name="fa_center_right">4</constant>
   </constants>
   <help>
     <rtf>help.rtf</rtf>

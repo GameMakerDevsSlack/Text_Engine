@@ -197,7 +197,7 @@ with( instance_create( _x, _y, _obj ) ) {
             ds_list_mark_as_map( _line_list, ds_list_size( _line_list ) - 1 );
             
             if ( _substr_object == noone ) {
-                _text_x += _substr_width + _space_width;
+                if ( !_new_line ) _text_x += _substr_width + _space_width;
             } else {
                 _text_x += _substr_width;
             }
@@ -229,6 +229,36 @@ with( instance_create( _x, _y, _obj ) ) {
         for( var _i = 0; _i < _lines_size; _i++ ) {
             var _line_map = _text_root_list[| _i ];
             _line_map[? "x" ] -= _line_map[? "width" ];
+        }
+        
+    } else if ( _halign == fa_center_left ) {
+        
+        var _lines_size = ds_list_size( _text_root_list );
+        
+        var _max_width = 0;
+        for( var _i = 0; _i < _lines_size; _i++ ) {
+            var _line_map = _text_root_list[| _i ];
+            _max_width = max( _max_width, _line_map[? "width" ] );
+        }
+        
+        for( var _i = 0; _i < _lines_size; _i++ ) {
+            var _line_map = _text_root_list[| _i ];
+            _line_map[? "x" ] -= _max_width/2;
+        }
+        
+    } else if ( _halign == fa_center_right ) {
+        
+        var _lines_size = ds_list_size( _text_root_list );
+        
+        var _max_width = 0;
+        for( var _i = 0; _i < _lines_size; _i++ ) {
+            var _line_map = _text_root_list[| _i ];
+            _max_width = max( _max_width, _line_map[? "width" ] );
+        }
+        
+        for( var _i = 0; _i < _lines_size; _i++ ) {
+            var _line_map = _text_root_list[| _i ];
+            _line_map[? "x" ] -= _line_map[? "width" ] - _max_width/2;
         }
         
     }
