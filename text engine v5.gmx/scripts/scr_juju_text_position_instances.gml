@@ -1,4 +1,4 @@
-///scr_text_draw( x, y, json )
+///scr_juju_text_position_instances( x, y, json )
 
 var _x    = argument0;
 var _y    = argument1;
@@ -20,13 +20,11 @@ for( var _i = 0; _i < _lines_size; _i++ ) {
     for( var _j = 0; _j < _words_size; _j++ ) {
         
         var _word_map = _words[| _j ];
-        if ( _word_map[? "object" ] != noone ) continue;
+        var _inst = _word_map[? "instance" ];
+        if ( !instance_exists( _inst ) ) continue;
         
-        var _str = _word_map[? "string" ];
-        var _str_x = _line_x + _word_map[? "x" ];
-        var _str_y = _line_y + _word_map[? "y" ];
-        
-        draw_text( _str_x, _str_y, _str );
+        _inst.x = _line_x + _word_map[? "x" ];
+        _inst.y = _line_y + _word_map[? "y" ];
         
     }
     

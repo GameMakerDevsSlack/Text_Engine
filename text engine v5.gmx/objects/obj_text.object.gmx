@@ -27,7 +27,7 @@
             <kind>1</kind>
             <string>///Destroy
 
-scr_text_destroy_instances( text_json );
+scr_juju_text_destroy_instances( text_json );
 ds_map_destroy( text_json );
 </string>
           </argument>
@@ -53,7 +53,7 @@ ds_map_destroy( text_json );
             <kind>1</kind>
             <string>///Step
 
-if ( x != xprevious ) or ( y != yprevious ) scr_text_destroy_instances( text_json );
+if ( x != xprevious ) or ( y != yprevious ) scr_juju_text_destroy_instances( text_json );
 </string>
           </argument>
         </arguments>
@@ -80,7 +80,7 @@ if ( x != xprevious ) or ( y != yprevious ) scr_text_destroy_instances( text_jso
 
 draw_circle( x, y, 5, true );
 draw_circle( x, y, 3, false );
-scr_text_draw( x, y, text_json );
+scr_juju_text_draw( x, y, text_json );
 </string>
           </argument>
         </arguments>

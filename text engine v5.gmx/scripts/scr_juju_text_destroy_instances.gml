@@ -1,4 +1,4 @@
-///scr_text_destroy_instances( json )
+///scr_juju_text_destroy_instances( json )
 
 var _json = argument0;
 

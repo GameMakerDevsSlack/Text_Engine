@@ -11,13 +11,15 @@
   <backgrounds name="background"/>
   <paths name="paths"/>
   <scripts name="scripts">
-    <script>scripts\scr_text_create.gml</script>
-    <script>scripts\scr_text_draw.gml</script>
-    <script>scripts\scr_text_position_instances.gml</script>
-    <script>scripts\scr_text_destroy_instances.gml</script>
+    <script>scripts\scr_juju_text_create.gml</script>
+    <script>scripts\scr_juju_text_colours.gml</script>
+    <script>scripts\scr_juju_text_draw.gml</script>
+    <script>scripts\scr_juju_text_position_instances.gml</script>
+    <script>scripts\scr_juju_text_destroy_instances.gml</script>
   </scripts>
   <fonts name="fonts">
-    <font>fonts\fnt_arial</font>
+    <font>fonts\fnt_arial_large</font>
+    <font>fonts\fnt_arial_medium</font>
   </fonts>
   <objects name="objects">
     <object>objects\obj_create</object>
@@ -27,6 +29,9 @@
   <rooms name="rooms">
     <room>rooms\rm_main</room>
   </rooms>
+  <constants number="1">
+    <constant name="DEFAULT">""</constant>
+  </constants>
   <help>
     <rtf>help.rtf</rtf>
   </help>
