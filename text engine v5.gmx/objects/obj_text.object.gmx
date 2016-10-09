@@ -78,8 +78,6 @@ if ( x != xprevious ) or ( y != yprevious ) scr_juju_text_destroy_instances( tex
             <kind>1</kind>
             <string>///Draw
 
-draw_circle( x, y, 5, true );
-draw_circle( x, y, 3, false );
 scr_juju_text_draw( x, y, text_json );
 </string>
           </argument>
