@@ -96,6 +96,7 @@ with( instance_create( _x, _y, _obj ) ) {
                             _substr_width  = sprite_get_width(  _substr_instance.sprite_index );
                             _substr_height = sprite_get_height( _substr_instance.sprite_index );
                             
+                            _substr_length = 1;
                             _text_x -= _space_width;
                             
                         } else if ( asset_get_type( _substr ) == asset_font ) {

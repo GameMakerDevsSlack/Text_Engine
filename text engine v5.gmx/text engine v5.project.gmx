@@ -24,7 +24,7 @@
   <objects name="objects">
     <object>objects\obj_create</object>
     <object>objects\obj_text</object>
-    <object>objects\obj_text_sprite</object>
+    <object>objects\obj_sprite</object>
   </objects>
   <rooms name="rooms">
     <room>rooms\rm_main</room>
