@@ -76,7 +76,22 @@ with( instance_create( _x, _y, _obj ) ) {
                 
                 _substr = string_copy( _substr, 2, _substr_length - 2 );
                 
-                if ( _substr == "" ) {
+                var _work_str = _substr + "|";
+                
+                var _pos = string_pos( "|", _work_str );
+                var _parameters = undefined;
+                var _count = 0;
+                while( _pos > 0 ) {
+                    
+                    _parameters[_count] = string_copy( _work_str, 1, _pos - 1 );
+                    _count++;
+                    
+                    _work_str = string_delete( _work_str, 1, _pos );
+                    _pos = string_pos( "|", _work_str );
+                    
+                }
+                
+                if ( _parameters[0] == "" ) {
                     
                     _skip = true;
                     _text_font = _def_font;
@@ -85,23 +100,24 @@ with( instance_create( _x, _y, _obj ) ) {
                     
                 } else {
                     
-                    var _asset = asset_get_index( _substr );
+                    var _asset = asset_get_index( _parameters[0] );
                     if ( _asset >= 0 ) {
                         
-                        if ( asset_get_type( _substr ) == asset_object ) {
+                        if ( asset_get_type( _parameters[0] ) == asset_object ) {
                             
                             _substr_object = _asset;
                             _substr_instance = instance_create( 0, 0, _substr_object );
                             ds_list_add( _text_instance_list, _substr_instance );
                             
                             _substr_instance.text_parent = id;
+                            _substr_instance.text_parameters = _parameters;
                             _substr_width  = sprite_get_width(  _substr_instance.sprite_index );
                             _substr_height = sprite_get_height( _substr_instance.sprite_index );
                             
                             _substr_length = 1;
                             _text_x -= _space_width;
                             
-                        } else if ( asset_get_type( _substr ) == asset_font ) {
+                        } else if ( asset_get_type( _parameters[0] ) == asset_font ) {
                             
                             _skip = true;
                             _text_font = _asset;
@@ -110,7 +126,7 @@ with( instance_create( _x, _y, _obj ) ) {
                         } else {
                             
                             _skip = true;
-                            var _colour = scr_juju_text_colours( _substr );
+                            var _colour = scr_juju_text_colours( _parameters[0] );
                             if ( _colour != noone ) _text_colour = _colour;
                             
                         }
@@ -118,7 +134,7 @@ with( instance_create( _x, _y, _obj ) ) {
                     } else {
                         
                         _skip = true;
-                        var _colour = scr_juju_text_colours( _substr );
+                        var _colour = scr_juju_text_colours( _parameters[0] );
                         if ( _colour != noone ) _text_colour = _colour;
                         
                     }
