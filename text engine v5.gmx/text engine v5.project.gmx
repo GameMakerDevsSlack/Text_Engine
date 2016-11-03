@@ -18,9 +18,11 @@
     <script>scripts\scr_juju_text_position_instances.gml</script>
     <script>scripts\scr_juju_text_destroy_instances.gml</script>
   </scripts>
+  <shaders name="shaders"/>
   <fonts name="fonts">
     <font>fonts\fnt_verdana_large</font>
     <font>fonts\fnt_tnr_larger</font>
+    <font>fonts\fnt_test</font>
   </fonts>
   <objects name="objects">
     <object>objects\obj_create</object>

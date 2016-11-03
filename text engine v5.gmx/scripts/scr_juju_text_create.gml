@@ -14,15 +14,9 @@ var _def_colour  = argument9;
 //Replace newlines with #
 _str = string_replace_all( _str, chr(10)+chr(13), chr(13) );
 _str = string_replace_all( _str, chr(13)+chr(10), chr(13) );
-_str = string_replace_all( _str, chr(10), " # " );
-_str = string_replace_all( _str, chr(13), " # " );
-
-//Space out command tags
-_str = string_replace_all( _str, "[", " [" );
-_str = string_replace_all( _str, "]", "] " );
-
-//Tag a space onto the end so the loop find every word
-_str += " ";
+_str = string_replace_all( _str,         chr(10), chr(13) );
+_str = string_replace_all( _str,             "#", chr(13) );
+_str = string_replace_all( _str,            "\n", chr(13) );
 
 with( instance_create( _x, _y, _obj ) ) {
     
@@ -45,6 +39,12 @@ with( instance_create( _x, _y, _obj ) ) {
     ds_map_add(      text_json, "halign"        , _halign );
     ds_map_add(      text_json, "valign"        , _valign );
     ds_map_add(      text_json, "length"        , 0 );
+    ds_map_add(      text_json, "width"         , 0 );
+    ds_map_add(      text_json, "height"        , 0 );
+    ds_map_add(      text_json, "left"          , 0 );
+    ds_map_add(      text_json, "top"           , 0 );
+    ds_map_add(      text_json, "right"         , 0 );
+    ds_map_add(      text_json, "bottom"        , 0 );
     
     var _text_x = 0;
     var _text_y = 0;
@@ -56,25 +56,54 @@ with( instance_create( _x, _y, _obj ) ) {
     var _text_colour = _def_colour;
     
     //Use spaces as splitting points
-    var _pos = string_pos( " ", _str );
-    while( _pos > 0 ) {
+    
+    var _sep_pos = string_length( _str ) + 1;
+    var _sep_prev_char = "";
+    var _sep_char = "";
+    
+    var _char = " ";
+    var _pos = string_pos( _char, _str );
+    if ( _pos < _sep_pos ) and ( _pos > 0 ) {
+        var _sep_char = _char;
+        var _sep_pos = _pos;
+    }
+    
+    var _char = chr(13);
+    var _pos = string_pos( _char, _str );
+    if ( _pos < _sep_pos ) and ( _pos > 0 ) {
+        var _sep_char = _char;
+        var _sep_pos = _pos;
+    }
+    
+    var _char = "[";
+    var _pos = string_pos( _char, _str );
+    if ( _pos < _sep_pos ) and ( _pos > 0 ) {
+        var _sep_char = _char;
+        var _sep_pos = _pos;
+    }
+    
+    var _char = "]";
+    var _pos = string_pos( _char, _str );
+    if ( _pos < _sep_pos ) and ( _pos > 0 ) {
+        var _sep_char = _char;
+        var _sep_pos = _pos;
+    }
+    
+    while( string_length( _str ) > 0 ) {
         
         var _skip = false;
-        var _new_line = false;
         
         var _substr_instance = noone;
         var _substr_object = noone;
         
-        var _substr_length = _pos - 1;
-        //if ( _substr_length <= 0 ) _skip = true;
+        var _substr_length = _sep_pos - 1;
         var _substr = string_copy( _str, 1, _substr_length );
-        _str = string_delete( _str, 1, _pos );
+        _str = string_delete( _str, 1, _sep_pos );
+        
         
         //Command handling
         if ( !_skip ) {
-            if ( string_copy( _substr, 1, 1 ) == "[" ) and ( string_copy( _substr, _substr_length, 1 ) == "]" ) {
-                
-                _substr = string_copy( _substr, 2, _substr_length - 2 );
+            if ( _sep_prev_char == "[" ) and ( _sep_char == "]" ) {
                 
                 var _work_str = _substr + "|";
                 
@@ -141,12 +170,6 @@ with( instance_create( _x, _y, _obj ) ) {
                     
                 }
                 
-            } else if ( _substr == "#" ) {
-                
-                _new_line = true;
-                _substr_width = 0;
-                _substr_height = 0;
-                
             } else {
                 
                 var _substr_width  = string_width( _substr );
@@ -159,7 +182,8 @@ with( instance_create( _x, _y, _obj ) ) {
         //Element positioning
         if ( !_skip ) {
             
-            if ( _substr_width + _text_x > _width_limit ) or ( _line_map == noone ) or ( _new_line ) {
+            //If we've run over the maximum width of the string
+            if ( _substr_width + _text_x > _width_limit ) or ( _line_map == noone ) or ( _sep_prev_char == chr(13) ) {
                 
                 if ( _line_map != noone ) {
                     
@@ -185,6 +209,7 @@ with( instance_create( _x, _y, _obj ) ) {
                 
             }
             
+            //Position any object created by the text
             if ( !instance_exists( _substr_instance ) ) {
                 
                 var _substr_x = _text_x;
@@ -197,32 +222,65 @@ with( instance_create( _x, _y, _obj ) ) {
                 
             }
             
+            //Add a new word
             var _map = ds_map_create();
             ds_map_add( _map, "x"       , _substr_x );
             ds_map_add( _map, "y"       , _substr_y );
             ds_map_add( _map, "width"   , _substr_width );
             ds_map_add( _map, "height"  , _substr_height );
             ds_map_add( _map, "string"  , _substr );
-            ds_map_add( _map, "length"  , _substr_length + 1 ); //Include the space!
+            ds_map_add( _map, "length"  , _substr_length + 1 ); //Include the separator character!
             ds_map_add( _map, "instance", _substr_instance );
             ds_map_add( _map, "object"  , _substr_object );
             ds_map_add( _map, "font"    , _text_font );
             ds_map_add( _map, "colour"  , _text_colour );
             
+            //Add the word to the line list
             ds_list_add( _line_list, _map );
             ds_list_mark_as_map( _line_list, ds_list_size( _line_list ) - 1 );
             
-            if ( _substr_object == noone ) {
-                if ( !_new_line ) _text_x += _substr_width + _space_width;
-            } else {
-                _text_x += _substr_width;
-            }
+            _text_x += _substr_width;
+            if ( _substr_object == noone ) and ( _sep_char == " " ) _text_x += _space_width; //Add spacing if the separation character is a space
             
         }
         
-        if ( _skip ) _text_x -= _space_width;
+        //Correction factor for commands
+        //if ( _skip ) _text_x -= _space_width;
         
-        var _pos = string_pos( " ", _str );
+        //Find the next separator
+        _sep_prev_char = _sep_char;
+        _sep_char = "";
+        _sep_pos = string_length( _str ) + 1;
+        
+        if ( _sep_prev_char != "[" ) {
+            _char = " ";
+            _pos = string_pos( _char, _str );
+            if ( _pos < _sep_pos ) and ( _pos > 0 ) {
+                _sep_char = _char;
+                _sep_pos = _pos;
+            }
+        }
+        
+        var _char = chr(13);
+        var _pos = string_pos( _char, _str );
+        if ( _pos < _sep_pos ) and ( _pos > 0 ) {
+            _sep_char = _char;
+            _sep_pos = _pos;
+        }
+    
+        var _char = "[";
+        var _pos = string_pos( _char, _str );
+        if ( _pos < _sep_pos ) and ( _pos > 0 ) {
+            var _sep_char = _char;
+            var _sep_pos = _pos;
+        }
+        
+        var _char = "]";
+        var _pos = string_pos( _char, _str );
+        if ( _pos < _sep_pos ) and ( _pos > 0 ) {
+            var _sep_char = _char;
+            var _sep_pos = _pos;
+        }
         
     }
     
@@ -230,10 +288,35 @@ with( instance_create( _x, _y, _obj ) ) {
     ds_map_replace( _line_map, "width" , _text_x - _space_width );
     ds_map_replace( _line_map, "height", _line_height );
     
-    //Justification
-    if ( _halign == fa_center ) {
+    //Textbox width and height
+    var _lines_size = ds_list_size( _text_root_list );
+    
+    var _textbox_width = 0;
+    for( var _i = 0; _i < _lines_size; _i++ ) {
+        var _line_map = _text_root_list[| _i ];
+        _textbox_width = max( _textbox_width, _line_map[? "width" ] );
+    }
+    
+    var _line_map = _text_root_list[| _lines_size - 1 ];
+    var _textbox_height = _line_map[? "y" ] + _line_map[? "height" ];
         
-        var _lines_size = ds_list_size( _text_root_list );
+    text_json[? "width" ] = _textbox_width;
+    text_json[? "height" ] = _textbox_height;
+    
+    
+    
+    
+    //Horizontal justification
+    if ( _halign == fa_left ) {
+        
+        text_json[? "left" ]  = 0;
+        text_json[? "right" ] = _textbox_width;
+        
+    } else if ( _halign == fa_center ) {
+        
+        text_json[? "left" ]  = -_textbox_width/2;
+        text_json[? "right" ] =  _textbox_width/2;
+        
         for( var _i = 0; _i < _lines_size; _i++ ) {
             var _line_map = _text_root_list[| _i ];
             _line_map[? "x" ] -= _line_map[? "width" ]/2;
@@ -241,7 +324,9 @@ with( instance_create( _x, _y, _obj ) ) {
         
     } else if ( _halign == fa_right ) {
         
-        var _lines_size = ds_list_size( _text_root_list );
+        text_json[? "left" ]  = -_textbox_width;
+        text_json[? "right" ] = 0;
+        
         for( var _i = 0; _i < _lines_size; _i++ ) {
             var _line_map = _text_root_list[| _i ];
             _line_map[? "x" ] -= _line_map[? "width" ];
@@ -249,54 +334,50 @@ with( instance_create( _x, _y, _obj ) ) {
         
     } else if ( _halign == fa_center_left ) {
         
-        var _lines_size = ds_list_size( _text_root_list );
-        
-        var _max_width = 0;
-        for( var _i = 0; _i < _lines_size; _i++ ) {
-            var _line_map = _text_root_list[| _i ];
-            _max_width = max( _max_width, _line_map[? "width" ] );
-        }
+        text_json[? "left" ]  = -_textbox_width/2;
+        text_json[? "right" ] =  _textbox_width/2;
         
         for( var _i = 0; _i < _lines_size; _i++ ) {
             var _line_map = _text_root_list[| _i ];
-            _line_map[? "x" ] -= _max_width/2;
+            _line_map[? "x" ] -= _textbox_width/2;
         }
         
     } else if ( _halign == fa_center_right ) {
         
-        var _lines_size = ds_list_size( _text_root_list );
-        
-        var _max_width = 0;
-        for( var _i = 0; _i < _lines_size; _i++ ) {
-            var _line_map = _text_root_list[| _i ];
-            _max_width = max( _max_width, _line_map[? "width" ] );
-        }
+        text_json[? "left" ]  = -_textbox_width/2;
+        text_json[? "right" ] =  _textbox_width/2;
         
         for( var _i = 0; _i < _lines_size; _i++ ) {
             var _line_map = _text_root_list[| _i ];
-            _line_map[? "x" ] -= _line_map[? "width" ] - _max_width/2;
+            _line_map[? "x" ] -= _line_map[? "width" ] - _textbox_width/2;
         }
         
     }
     
-    if ( _valign == fa_middle ) {
+    //Vertical justification
+    if ( _valign == fa_top ) {
         
-        var _lines_size = ds_list_size( _text_root_list );
-        var _last_line = _text_root_list[| _lines_size - 1 ];
-        var _max_height = ( _line_map[? "y" ] + _line_map[? "height" ] )/2;
+        text_json[? "top" ]    = 0;
+        text_json[? "bottom" ] = _textbox_height;
+    
+    } else if ( _valign == fa_middle ) {
+        
+        text_json[? "top" ]    = -_textbox_height/2;
+        text_json[? "bottom" ] =  _textbox_height/2;
+        
         for( var _i = 0; _i < _lines_size; _i++ ) {
             var _line_map = _text_root_list[| _i ];
-            _line_map[? "y" ] -= _max_height;
+            _line_map[? "y" ] -= _textbox_height/2;
         }
         
     } else if ( _valign == fa_bottom ) {
         
-        var _lines_size = ds_list_size( _text_root_list );
-        var _last_line = _text_root_list[| _lines_size - 1 ];
-        var _max_height = _line_map[? "y" ] + _line_map[? "height" ];
+        text_json[? "top" ]    = -_textbox_height;
+        text_json[? "bottom" ] = 0;
+        
         for( var _i = 0; _i < _lines_size; _i++ ) {
             var _line_map = _text_root_list[| _i ];
-            _line_map[? "y" ] -= _max_height;
+            _line_map[? "y" ] -= _textbox_height;
         }
         
     }
