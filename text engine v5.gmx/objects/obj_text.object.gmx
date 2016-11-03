@@ -53,7 +53,10 @@ ds_map_destroy( text_json );
             <kind>1</kind>
             <string>///Step
 
-if ( x != xprevious ) or ( y != yprevious ) scr_juju_text_destroy_instances( text_json );
+//if ( x != xprevious ) or ( y != yprevious ) scr_juju_text_destroy_instances( text_json );
+if ( mouse_check_button( mb_left ) ) {
+    scr_juju_text_move( id, mouse_x, mouse_y );
+}
 </string>
           </argument>
         </arguments>
