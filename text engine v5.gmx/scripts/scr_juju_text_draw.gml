@@ -41,11 +41,11 @@ for( var _i = 0; _i < _lines_size; _i++ ) {
         var _str_y = _line_y + _word_map[? "y" ];
         
         draw_text( _str_x, _str_y, _str );
-        draw_rectangle( _str_x, _str_y, _str_x + _word_map[? "width" ], _str_y + _word_map[? "height" ], true );
+        //draw_rectangle( _str_x, _str_y, _str_x + _word_map[? "width" ], _str_y + _word_map[? "height" ], true );
         
     }
     
-    draw_rectangle( _line_x, _line_y, _line_x + _line_map[? "width" ], _line_y + _line_map[? "height" ], true );
+    //draw_rectangle( _line_x, _line_y, _line_x + _line_map[? "width" ], _line_y + _line_map[? "height" ], true );
     
 }
 
