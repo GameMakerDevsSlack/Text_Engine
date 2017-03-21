@@ -81,14 +81,12 @@ if ( mouse_check_button( mb_left ) ) {
             <kind>1</kind>
             <string>///Draw
 
-scr_juju_text_draw( x, y, text_json );
-
 var _l = text_json[? "left" ];
 var _t = text_json[? "top" ];
 var _r = text_json[? "right" ];
 var _b = text_json[? "bottom" ];
 
-draw_rectangle( _l + x, _t + y, _r + x, _b + y, true );
+scr_juju_text_draw( x, y, text_json );
 </string>
           </argument>
         </arguments>
