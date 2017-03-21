@@ -285,7 +285,7 @@ with( instance_create( _x, _y, _obj ) ) {
     }
     
     //Finish defining the last line
-    ds_map_replace( _line_map, "width" , _text_x - _space_width );
+    ds_map_replace( _line_map, "width" , _text_x );
     ds_map_replace( _line_map, "height", _line_height );
     
     //Textbox width and height
