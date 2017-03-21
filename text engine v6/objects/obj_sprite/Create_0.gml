@@ -1,0 +1,1 @@
+text_parameters[0] = undefined;
