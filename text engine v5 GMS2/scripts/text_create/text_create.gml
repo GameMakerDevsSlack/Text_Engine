@@ -1,4 +1,10 @@
-///text_create( string, default font, max width, line height, halign, valign, default colour )
+/// @param string
+/// @param default_font
+/// @param max_width
+/// @param line_height
+/// @param halign
+/// @param valign
+/// @param default_colour
 //
 //  April 2017
 //  Juju Adams

@@ -1,4 +1,4 @@
-///text_colours( name )
+/// @param name
 //
 //  April 2017
 //  Juju Adams
