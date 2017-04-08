@@ -22,7 +22,6 @@
     <font>fonts\fnt_tnr_larger</font>
   </fonts>
   <objects name="objects">
-    <object>objects\obj_create</object>
     <object>objects\obj_text</object>
   </objects>
   <rooms name="rooms">
