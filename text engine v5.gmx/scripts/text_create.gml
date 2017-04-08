@@ -1,4 +1,4 @@
-///text_create( string, default font, max width, line height, halign, valign, default colour )
+///text_create( string, max width, line height, halign, valign, default font, default colour, intro style, outro style )
 //
 //  April 2017
 //  Juju Adams
@@ -9,12 +9,14 @@
 //  https://creativecommons.org/licenses/by-nc-sa/4.0/
 
 var _str         = argument0;
-var _def_font    = argument1;
-var _width_limit = argument2;
-var _line_height = argument3;
-var _halign      = argument4;
-var _valign      = argument5;
+var _width_limit = argument1;
+var _line_height = argument2;
+var _halign      = argument3;
+var _valign      = argument4;
+var _def_font    = argument5;
 var _def_colour  = argument6;
+var _intro_style = argument7;
+var _outro_style = argument8;
 
 //Replace newlines with #
 _str = string_replace_all( _str, chr(10)+chr(13), chr(13) );
@@ -30,33 +32,40 @@ if ( !is_real( _line_height ) ) or ( _line_height < 0 ) var _line_height = strin
 var _json = ds_map_create();
 
 var _text_root_list     = ds_list_create();
-ds_map_add_list( _json, "lines"         , _text_root_list );
-ds_map_add(      _json, "string"        , _str );
-ds_map_add(      _json, "default font"  , _def_font );
-ds_map_add(      _json, "default colour", _def_colour );
-ds_map_add(      _json, "width limit"   , _width_limit );
-ds_map_add(      _json, "line height"   , _line_height );
-ds_map_add(      _json, "halign"        , _halign );
-ds_map_add(      _json, "valign"        , _valign );
-ds_map_add(      _json, "length"        , 0 );
-ds_map_add(      _json, "width"         , 0 );
-ds_map_add(      _json, "height"        , 0 );
-ds_map_add(      _json, "left"          , 0 );
-ds_map_add(      _json, "top"           , 0 );
-ds_map_add(      _json, "right"         , 0 );
-ds_map_add(      _json, "bottom"        , 0 );
+ds_map_add_list( _json, "lines"           , _text_root_list );
+ds_map_add(      _json, "string"          , _str );
+ds_map_add(      _json, "default font"    , _def_font );
+ds_map_add(      _json, "default colour"  , _def_colour );
+ds_map_add(      _json, "width limit"     , _width_limit );
+ds_map_add(      _json, "line height"     , _line_height );
+ds_map_add(      _json, "halign"          , _halign );
+ds_map_add(      _json, "valign"          , _valign );
+ds_map_add(      _json, "length"          , 0 );
+ds_map_add(      _json, "words"           , 0 );
+ds_map_add(      _json, "width"           , 0 );
+ds_map_add(      _json, "height"          , 0 );
+ds_map_add(      _json, "left"            , 0 );
+ds_map_add(      _json, "top"             , 0 );
+ds_map_add(      _json, "right"           , 0 );
+ds_map_add(      _json, "bottom"          , 0 );
+ds_map_add(      _json, "intro style"     , _intro_style );
+ds_map_add(      _json, "intro max"       , 0 );
+ds_map_add(      _json, "outro style"     , _outro_style );
+ds_map_add(      _json, "outro max"       , 0 );
+ds_map_add(      _json, "transition timer", 0 );
+ds_map_add(      _json, "transition state", text_state_intro );
 
 var _text_x = 0;
 var _text_y = 0;
 
 var _line_map = noone;
 var _line_list = noone;
+var _line_length = 0;
 
 var _text_font   = _def_font;
 var _text_colour = _def_colour;
 
 //Use spaces as splitting points
-
 var _sep_pos = string_length( _str ) + 1;
 var _sep_prev_char = "";
 var _sep_char = "";
@@ -97,10 +106,9 @@ while( string_length( _str ) > 0 ) {
     var _substr_height = undefined;
     
     var _substr_length = _sep_pos - 1;
+    var _substr_sprite = noone;
     var _substr = string_copy( _str, 1, _substr_length );
     _str = string_delete( _str, 1, _sep_pos );
-    
-    var _substr_sprite = noone;
     
     //Command handling
     if ( !_skip ) {
@@ -182,8 +190,6 @@ while( string_length( _str ) > 0 ) {
         //If we've run over the maximum width of the string
         if ( _substr_width + _text_x > _width_limit ) or ( _line_map == noone ) or ( _sep_prev_char == chr(13) ) {
             
-            if ( _substr_sprite != noone ) show_message( "5  " + sprite_get_name( _substr_sprite ) + ":" + string( _substr_width ) );
-            
             if ( _line_map != noone ) {
                 
                 ds_map_replace( _line_map, "width" , _text_x );
@@ -191,6 +197,7 @@ while( string_length( _str ) > 0 ) {
                 
                 _text_x = 0;
                 _text_y += _line_height;
+                _line_length = 0;
                 
             }
             
@@ -204,6 +211,7 @@ while( string_length( _str ) > 0 ) {
             ds_map_add(      _line_map, "y"     , _text_y );
             ds_map_add(      _line_map, "width" , 0 );
             ds_map_add(      _line_map, "height", _line_height );
+            ds_map_add(      _line_map, "length", 0 );
             ds_map_add_list( _line_map, "words" , _line_list );
             
         }
@@ -216,7 +224,7 @@ while( string_length( _str ) > 0 ) {
         ds_map_add( _map, "height"  , _substr_height );
         ds_map_add( _map, "string"  , _substr );
         ds_map_add( _map, "sprite"  , _substr_sprite );
-        ds_map_add( _map, "length"  , _substr_length + 1 ); //Include the separator character!
+        ds_map_add( _map, "length"  , _substr_length ); //Include the separator character!
         ds_map_add( _map, "font"    , _text_font );
         ds_map_add( _map, "colour"  , _text_colour );
         
@@ -226,6 +234,10 @@ while( string_length( _str ) > 0 ) {
         
         _text_x += _substr_width;
         if ( _sep_char == " " ) _text_x += _space_width; //Add spacing if the separation character is a space
+        
+        _line_map[? "length" ] += _substr_length;
+        if ( _substr_length > 0 ) _json[? "words" ]++;
+        _json[? "length" ] += _substr_length;
         
     }
     
@@ -281,11 +293,27 @@ for( var _i = 0; _i < _lines_size; _i++ ) {
 
 var _line_map = _text_root_list[| _lines_size - 1 ];
 var _textbox_height = _line_map[? "y" ] + _line_map[? "height" ];
-    
-_json[? "width" ] = _textbox_width;
+  
+_json[? "width" ]  = _textbox_width;
 _json[? "height" ] = _textbox_height;
 
 
+
+switch( _intro_style ) {
+    case text_no_fade:       _json[? "intro max" ] = 1;                                 break;
+    case text_fade:          _json[? "intro max" ] = 1;                                 break;
+    case text_fade_per_char: _json[? "intro max" ] = _json[? "length" ];                break;
+    case text_fade_per_word: _json[? "intro max" ] = _json[? "words" ];                 break;
+    case text_fade_per_line: _json[? "intro max" ] = ds_list_size( _json[? "lines" ] ); break;
+}
+
+switch( _outro_style ) {
+    case text_no_fade:       _json[? "outro max" ] = 1;                                 break;
+    case text_fade:          _json[? "outro max" ] = 1;                                 break;
+    case text_fade_per_char: _json[? "outro max" ] = _json[? "length" ];                break;
+    case text_fade_per_word: _json[? "outro max" ] = _json[? "words" ];                 break;
+    case text_fade_per_line: _json[? "outro max" ] = ds_list_size( _json[? "lines" ] ); break;
+}
 
 
 //Horizontal justification

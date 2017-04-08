@@ -15,6 +15,9 @@
     <script>scripts\text_create.gml</script>
     <script>scripts\text_colours.gml</script>
     <script>scripts\text_draw.gml</script>
+    <script>scripts\__text_draw_reverse.gml</script>
+    <script>scripts\text_animate_intro.gml</script>
+    <script>scripts\text_animate_outro.gml</script>
   </scripts>
   <shaders name="shaders"/>
   <fonts name="fonts">
@@ -28,10 +31,19 @@
   <rooms name="rooms">
     <room>rooms\rm_main</room>
   </rooms>
-  <constants number="3">
+  <constants number="12">
     <constant name="DEFAULT">""</constant>
     <constant name="fa_center_left">3</constant>
     <constant name="fa_center_right">4</constant>
+    <constant name="text_no_fade">0</constant>
+    <constant name="text_fade">1</constant>
+    <constant name="text_fade_per_char">2</constant>
+    <constant name="text_fade_per_line">3</constant>
+    <constant name="text_fade_per_word">4</constant>
+    <constant name="text_state_intro">0</constant>
+    <constant name="text_state_visible">1</constant>
+    <constant name="text_state_outro">2</constant>
+    <constant name="text_state_invisible">3</constant>
   </constants>
   <help>
     <rtf>help.rtf</rtf>
