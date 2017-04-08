@@ -1,5 +1,5 @@
 {
-    "id": "705b7b3e-8d49-43fe-9d39-009955a7d481",
+    "id": "f51d506d-2754-4a37-90d0-cff6b4fc7153",
     "modelName": "GMRoom",
     "mvc": "1.0",
     "name": "rm_main",
@@ -9,12 +9,12 @@
     "inheritCreationOrder": false,
     "inheritLayers": false,
     "instanceCreationOrderIDs": [
-        "8f653b48-56e8-462c-8a3f-a2387839028b"
+        "ba35dcb2-a3d5-43e9-93ca-4b11e29f10cf"
     ],
     "layers": [
         {
             "__type": "GMRInstanceLayer_Model:#YoYoStudio.MVCFormat",
-            "id": "3c7106aa-1018-4a63-937f-879f746e5f31",
+            "id": "f9b8fbc7-1e20-46d7-a7a0-c11d7b278a48",
             "modelName": "GMRInstanceLayer",
             "mvc": "1.0",
             "depth": 0,
@@ -31,21 +31,21 @@
             ],
             "m_parentID": "00000000-0000-0000-0000-000000000000",
             "m_serialiseFrozen": false,
-            "name": "lyr_instances",
-            "userdefined_depth": false,
+            "name": "Compatibility_Instances_Depth_0",
+            "userdefined_depth": true,
             "visible": true,
             "instances": [
                 {
-                    "id": "8f653b48-56e8-462c-8a3f-a2387839028b",
+                    "id": "ba35dcb2-a3d5-43e9-93ca-4b11e29f10cf",
                     "modelName": "GMRInstance",
                     "mvc": "1.0",
                     "ignore": false,
                     "inheritItemSettings": false,
                     "m_originalParentID": "00000000-0000-0000-0000-000000000000",
                     "m_serialiseFrozen": false,
-                    "name": "inst_D05C406",
-                    "x": 0,
-                    "y": 0,
+                    "name": "inst_B2465057",
+                    "x": 512,
+                    "y": 384,
                     "IsDnD": false,
                     "colour": {
                         "Value": 4294967295
@@ -53,8 +53,8 @@
                     "creationCodeFile": "",
                     "creationCodeType": "",
                     "inheritCode": false,
-                    "name_with_no_file_rename": "inst_D05C406",
-                    "objId": "cd9125d4-995e-40fa-a2b2-6cf383487718",
+                    "name_with_no_file_rename": "inst_B2465057",
+                    "objId": "c3364dc4-d371-4580-8dcc-bfb59b28c990",
                     "rotation": 0,
                     "scaleX": 1,
                     "scaleY": 1
@@ -63,10 +63,10 @@
         },
         {
             "__type": "GMRBackgroundLayer_Model:#YoYoStudio.MVCFormat",
-            "id": "20ebd200-c9c2-4e39-a5e6-52469e60747e",
+            "id": "28ce081f-3550-44d1-b292-e6d343a953b3",
             "modelName": "GMRBackgroundLayer",
             "mvc": "1.0",
-            "depth": 100,
+            "depth": 2147483600,
             "grid_x": 32,
             "grid_y": 32,
             "hierarchyFrozen": false,
@@ -80,13 +80,13 @@
             ],
             "m_parentID": "00000000-0000-0000-0000-000000000000",
             "m_serialiseFrozen": false,
-            "name": "lyr_background",
-            "userdefined_depth": false,
+            "name": "Compatibility_Colour",
+            "userdefined_depth": true,
             "visible": true,
             "animationFPS": 15,
             "animationSpeedType": 0,
             "colour": {
-                "Value": 4288256409
+                "Value": 4290822336
             },
             "hspeed": 0,
             "htiled": false,
@@ -101,7 +101,7 @@
     ],
     "parentId": "00000000-0000-0000-0000-000000000000",
     "physicsSettings": {
-        "id": "93abfbf5-329c-4e54-b0f5-014c02f8c7d3",
+        "id": "bee28dbf-ea51-4803-9536-00f68821b98f",
         "modelName": "GMRoomPhysicsSettings",
         "mvc": "1.0",
         "PhysicsWorld": false,
@@ -111,7 +111,7 @@
         "inheritPhysicsSettings": false
     },
     "roomSettings": {
-        "id": "a0b751d0-129e-4927-861e-e00ff4de08ab",
+        "id": "ebc44297-6674-489b-9471-d24627b5f6ae",
         "modelName": "GMRoomSettings",
         "mvc": "1.0",
         "Height": 768,
@@ -120,17 +120,17 @@
         "persistent": false
     },
     "viewSettings": {
-        "id": "eff9daf2-d0cc-4610-9b91-1df9726fe0b0",
+        "id": "7ba8d23a-a6a6-4451-bde9-a2f48a8eb9ba",
         "modelName": "GMRoomViewSettings",
         "mvc": "1.0",
         "clearDisplayBuffer": true,
-        "clearViewBackground": false,
+        "clearViewBackground": true,
         "enableViews": false,
         "inheritViewSettings": false
     },
     "views": [
         {
-            "id": "bcb8922f-4568-43c6-abd1-b4f6f4ad43f7",
+            "id": "1fc704fe-7f10-483e-a39a-aa216157265d",
             "modelName": "GMRView",
             "mvc": "1.0",
             "hborder": 32,
@@ -150,7 +150,7 @@
             "yview": 0
         },
         {
-            "id": "ac49341f-9431-49b1-a1d0-71686b4376e6",
+            "id": "271f0d67-e17b-43b6-a103-95ae3483637d",
             "modelName": "GMRView",
             "mvc": "1.0",
             "hborder": 32,
@@ -170,7 +170,7 @@
             "yview": 0
         },
         {
-            "id": "aba96ca8-2fe6-4cf3-abee-3aec066cffb7",
+            "id": "15aadfa8-918b-482f-acf2-8212f0d5653f",
             "modelName": "GMRView",
             "mvc": "1.0",
             "hborder": 32,
@@ -190,7 +190,7 @@
             "yview": 0
         },
         {
-            "id": "36f90e6d-d90e-470e-8cdb-68256eceecf4",
+            "id": "e589a71f-6709-4e56-a6c5-4354a6a9c857",
             "modelName": "GMRView",
             "mvc": "1.0",
             "hborder": 32,
@@ -210,7 +210,7 @@
             "yview": 0
         },
         {
-            "id": "e377ce22-35e7-4dcb-aa07-b931a81bd537",
+            "id": "6878e0b3-028e-4892-b630-ee6332bbda13",
             "modelName": "GMRView",
             "mvc": "1.0",
             "hborder": 32,
@@ -230,7 +230,7 @@
             "yview": 0
         },
         {
-            "id": "495e0ba9-759d-4721-9826-816ddb732b62",
+            "id": "58abb6c3-fef8-4d1e-9106-0fa42d65c062",
             "modelName": "GMRView",
             "mvc": "1.0",
             "hborder": 32,
@@ -250,7 +250,7 @@
             "yview": 0
         },
         {
-            "id": "ebe93d23-d17f-45b3-88af-295888623288",
+            "id": "a078bf85-4531-465a-af68-e288046ae550",
             "modelName": "GMRView",
             "mvc": "1.0",
             "hborder": 32,
@@ -270,7 +270,7 @@
             "yview": 0
         },
         {
-            "id": "5bc5a620-8d45-4b11-bba2-175bd05c81e4",
+            "id": "985ff1a8-c326-4411-91d1-f39ba840d59d",
             "modelName": "GMRView",
             "mvc": "1.0",
             "hborder": 32,

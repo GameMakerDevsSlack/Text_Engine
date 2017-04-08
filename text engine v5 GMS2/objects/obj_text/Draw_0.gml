@@ -1,6 +1,10 @@
-var _l = text_json[? "left" ];
-var _t = text_json[? "top" ];
-var _r = text_json[? "right" ];
-var _b = text_json[? "bottom" ];
+//  April 2017
+//  Juju Adams
+//  julian.adams@email.com
+//  @jujuadams
+//
+//  This code and engine are provided under the Creative Commons "Attribution - NonCommerical - ShareAlike" international license.
+//  https://creativecommons.org/licenses/by-nc-sa/4.0/
 
-juju_text_draw( x, y, text_json );
+text_draw( x, y, text_json, false );
+
