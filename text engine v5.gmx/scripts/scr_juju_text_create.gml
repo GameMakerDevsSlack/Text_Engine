@@ -28,9 +28,7 @@ with( instance_create( _x, _y, _obj ) ) {
     text_json = ds_map_create();
     
     var _text_root_list     = ds_list_create();
-    var _text_instance_list = ds_list_create();
     ds_map_add_list( text_json, "lines"         , _text_root_list );
-    ds_map_add_list( text_json, "instances"     , _text_instance_list );
     ds_map_add(      text_json, "string"        , _str );
     ds_map_add(      text_json, "default font"  , _def_font );
     ds_map_add(      text_json, "default colour", _def_colour );
@@ -95,11 +93,14 @@ with( instance_create( _x, _y, _obj ) ) {
         
         var _substr_instance = noone;
         var _substr_object = noone;
+        var _substr_width = undefined;
+        var _substr_height = undefined;
         
         var _substr_length = _sep_pos - 1;
         var _substr = string_copy( _str, 1, _substr_length );
         _str = string_delete( _str, 1, _sep_pos );
         
+        var _substr_sprite = noone;
         
         //Command handling
         if ( !_skip ) {
@@ -132,19 +133,12 @@ with( instance_create( _x, _y, _obj ) ) {
                     var _asset = asset_get_index( _parameters[0] );
                     if ( _asset >= 0 ) {
                         
-                        if ( asset_get_type( _parameters[0] ) == asset_object ) {
+                        if ( asset_get_type( _parameters[0] ) == asset_sprite ) {
                             
-                            _substr_object = _asset;
-                            _substr_instance = instance_create( 0, 0, _substr_object );
-                            ds_list_add( _text_instance_list, _substr_instance );
-                            
-                            _substr_instance.text_parent = id;
-                            _substr_instance.text_parameters = _parameters;
-                            _substr_width  = sprite_get_width(  _substr_instance.sprite_index );
-                            _substr_height = sprite_get_height( _substr_instance.sprite_index );
-                            
+                            _substr_sprite = _asset;
+                            _substr_width  = sprite_get_width(  _substr_sprite );
+                            _substr_height = sprite_get_height( _substr_sprite );
                             _substr_length = 1;
-                            _text_x -= _space_width;
                             
                         } else if ( asset_get_type( _parameters[0] ) == asset_font ) {
                             
@@ -172,8 +166,8 @@ with( instance_create( _x, _y, _obj ) ) {
                 
             } else {
                 
-                var _substr_width  = string_width( _substr );
-                var _substr_height = string_height( _substr );
+                _substr_width  = string_width( _substr );
+                _substr_height = string_height( _substr );
                 
             }
             
@@ -184,6 +178,8 @@ with( instance_create( _x, _y, _obj ) ) {
             
             //If we've run over the maximum width of the string
             if ( _substr_width + _text_x > _width_limit ) or ( _line_map == noone ) or ( _sep_prev_char == chr(13) ) {
+                
+                if ( _substr_sprite != noone ) show_message( "5  " + sprite_get_name( _substr_sprite ) + ":" + string( _substr_width ) );
                 
                 if ( _line_map != noone ) {
                     
@@ -213,12 +209,12 @@ with( instance_create( _x, _y, _obj ) ) {
             if ( !instance_exists( _substr_instance ) ) {
                 
                 var _substr_x = _text_x;
-                var _substr_y = ( _line_height - _substr_height )/2;
+                var _substr_y = ( _line_height - _substr_height ) div 2;
                 
             } else {
                 
                 var _substr_x = _text_x + sprite_get_xoffset( _substr_instance.sprite_index );
-                var _substr_y = ( _line_height - _substr_height )/2 + sprite_get_yoffset( _substr_instance.sprite_index );
+                var _substr_y = ( _line_height - _substr_height ) div 2 + sprite_get_yoffset( _substr_instance.sprite_index );
                 
             }
             
@@ -229,8 +225,8 @@ with( instance_create( _x, _y, _obj ) ) {
             ds_map_add( _map, "width"   , _substr_width );
             ds_map_add( _map, "height"  , _substr_height );
             ds_map_add( _map, "string"  , _substr );
+            ds_map_add( _map, "sprite"  , _substr_sprite );
             ds_map_add( _map, "length"  , _substr_length + 1 ); //Include the separator character!
-            ds_map_add( _map, "instance", _substr_instance );
             ds_map_add( _map, "object"  , _substr_object );
             ds_map_add( _map, "font"    , _text_font );
             ds_map_add( _map, "colour"  , _text_colour );
@@ -243,9 +239,6 @@ with( instance_create( _x, _y, _obj ) ) {
             if ( _substr_object == noone ) and ( _sep_char == " " ) _text_x += _space_width; //Add spacing if the separation character is a space
             
         }
-        
-        //Correction factor for commands
-        //if ( _skip ) _text_x -= _space_width;
         
         //Find the next separator
         _sep_prev_char = _sep_char;
@@ -314,12 +307,12 @@ with( instance_create( _x, _y, _obj ) ) {
         
     } else if ( _halign == fa_center ) {
         
-        text_json[? "left" ]  = -_textbox_width/2;
-        text_json[? "right" ] =  _textbox_width/2;
+        text_json[? "left" ]  = -_textbox_width div 2;
+        text_json[? "right" ] =  _textbox_width div 2;
         
         for( var _i = 0; _i < _lines_size; _i++ ) {
             var _line_map = _text_root_list[| _i ];
-            _line_map[? "x" ] -= _line_map[? "width" ]/2;
+            _line_map[? "x" ] -= _line_map[? "width" ] div 2;
         }
         
     } else if ( _halign == fa_right ) {
@@ -334,22 +327,22 @@ with( instance_create( _x, _y, _obj ) ) {
         
     } else if ( _halign == fa_center_left ) {
         
-        text_json[? "left" ]  = -_textbox_width/2;
-        text_json[? "right" ] =  _textbox_width/2;
+        text_json[? "left" ]  = -_textbox_width div 2;
+        text_json[? "right" ] =  _textbox_width div 2;
         
         for( var _i = 0; _i < _lines_size; _i++ ) {
             var _line_map = _text_root_list[| _i ];
-            _line_map[? "x" ] -= _textbox_width/2;
+            _line_map[? "x" ] -= _textbox_width div 2;
         }
         
     } else if ( _halign == fa_center_right ) {
         
-        text_json[? "left" ]  = -_textbox_width/2;
-        text_json[? "right" ] =  _textbox_width/2;
+        text_json[? "left" ]  = -_textbox_width div 2;
+        text_json[? "right" ] =  _textbox_width div 2;
         
         for( var _i = 0; _i < _lines_size; _i++ ) {
             var _line_map = _text_root_list[| _i ];
-            _line_map[? "x" ] -= _line_map[? "width" ] - _textbox_width/2;
+            _line_map[? "x" ] -= _line_map[? "width" ] - _textbox_width div 2;
         }
         
     }
@@ -362,12 +355,12 @@ with( instance_create( _x, _y, _obj ) ) {
     
     } else if ( _valign == fa_middle ) {
         
-        text_json[? "top" ]    = -_textbox_height/2;
-        text_json[? "bottom" ] =  _textbox_height/2;
+        text_json[? "top" ]    = -_textbox_height div 2;
+        text_json[? "bottom" ] =  _textbox_height div 2;
         
         for( var _i = 0; _i < _lines_size; _i++ ) {
             var _line_map = _text_root_list[| _i ];
-            _line_map[? "y" ] -= _textbox_height/2;
+            _line_map[? "y" ] -= _textbox_height div 2;
         }
         
     } else if ( _valign == fa_bottom ) {
@@ -382,7 +375,7 @@ with( instance_create( _x, _y, _obj ) ) {
         
     }
     
-    scr_juju_text_position_instances( x, y, text_json );
+    get_string( "", json_encode( text_json ) );
     
     return id;
     
