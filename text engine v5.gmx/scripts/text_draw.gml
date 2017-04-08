@@ -1,4 +1,4 @@
-///scr_juju_text_draw( x, y, json )
+///text_draw( x, y, json )
 
 var _x    = argument0;
 var _y    = argument1;
@@ -23,7 +23,6 @@ for( var _i = 0; _i < _lines_size; _i++ ) {
     for( var _j = 0; _j < _words_size; _j++ ) {
         
         var _word_map = _words[| _j ];
-        if ( _word_map[? "object" ] != noone ) continue;
         
         if ( _word_map[? "sprite" ] != noone ) {
             

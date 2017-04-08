@@ -1,4 +1,4 @@
-///scr_juju_text_create( x, y, string, object, default font, max width, line height, halign, valign, default colour )
+///text_create( x, y, string, object, default font, max width, line height, halign, valign, default colour )
 
 var _x           = argument0;
 var _y           = argument1;
@@ -91,8 +91,6 @@ with( instance_create( _x, _y, _obj ) ) {
         
         var _skip = false;
         
-        var _substr_instance = noone;
-        var _substr_object = noone;
         var _substr_width = undefined;
         var _substr_height = undefined;
         
@@ -133,6 +131,7 @@ with( instance_create( _x, _y, _obj ) ) {
                     var _asset = asset_get_index( _parameters[0] );
                     if ( _asset >= 0 ) {
                         
+                        //Asset is a sprite...
                         if ( asset_get_type( _parameters[0] ) == asset_sprite ) {
                             
                             _substr_sprite = _asset;
@@ -140,16 +139,18 @@ with( instance_create( _x, _y, _obj ) ) {
                             _substr_height = sprite_get_height( _substr_sprite );
                             _substr_length = 1;
                             
+                        //Asset is a font...
                         } else if ( asset_get_type( _parameters[0] ) == asset_font ) {
                             
                             _skip = true;
                             _text_font = _asset;
                             draw_set_font( _text_font );
                             
+                        //Asset is a colour..?
                         } else {
                             
                             _skip = true;
-                            var _colour = scr_juju_text_colours( _parameters[0] );
+                            var _colour = text_colours( _parameters[0] );
                             if ( _colour != noone ) _text_colour = _colour;
                             
                         }
@@ -157,7 +158,7 @@ with( instance_create( _x, _y, _obj ) ) {
                     } else {
                         
                         _skip = true;
-                        var _colour = scr_juju_text_colours( _parameters[0] );
+                        var _colour = text_colours( _parameters[0] );
                         if ( _colour != noone ) _text_colour = _colour;
                         
                     }
@@ -205,29 +206,15 @@ with( instance_create( _x, _y, _obj ) ) {
                 
             }
             
-            //Position any object created by the text
-            if ( !instance_exists( _substr_instance ) ) {
-                
-                var _substr_x = _text_x;
-                var _substr_y = ( _line_height - _substr_height ) div 2;
-                
-            } else {
-                
-                var _substr_x = _text_x + sprite_get_xoffset( _substr_instance.sprite_index );
-                var _substr_y = ( _line_height - _substr_height ) div 2 + sprite_get_yoffset( _substr_instance.sprite_index );
-                
-            }
-            
             //Add a new word
             var _map = ds_map_create();
-            ds_map_add( _map, "x"       , _substr_x );
-            ds_map_add( _map, "y"       , _substr_y );
+            ds_map_add( _map, "x"       , _text_x );
+            ds_map_add( _map, "y"       , ( _line_height - _substr_height ) div 2 );
             ds_map_add( _map, "width"   , _substr_width );
             ds_map_add( _map, "height"  , _substr_height );
             ds_map_add( _map, "string"  , _substr );
             ds_map_add( _map, "sprite"  , _substr_sprite );
             ds_map_add( _map, "length"  , _substr_length + 1 ); //Include the separator character!
-            ds_map_add( _map, "object"  , _substr_object );
             ds_map_add( _map, "font"    , _text_font );
             ds_map_add( _map, "colour"  , _text_colour );
             
@@ -236,7 +223,7 @@ with( instance_create( _x, _y, _obj ) ) {
             ds_list_mark_as_map( _line_list, ds_list_size( _line_list ) - 1 );
             
             _text_x += _substr_width;
-            if ( _substr_object == noone ) and ( _sep_char == " " ) _text_x += _space_width; //Add spacing if the separation character is a space
+            if ( _sep_char == " " ) _text_x += _space_width; //Add spacing if the separation character is a space
             
         }
         
@@ -374,8 +361,6 @@ with( instance_create( _x, _y, _obj ) ) {
         }
         
     }
-    
-    get_string( "", json_encode( text_json ) );
     
     return id;
     

@@ -12,9 +12,9 @@
   <backgrounds name="background"/>
   <paths name="paths"/>
   <scripts name="scripts">
-    <script>scripts\scr_juju_text_create.gml</script>
-    <script>scripts\scr_juju_text_colours.gml</script>
-    <script>scripts\scr_juju_text_draw.gml</script>
+    <script>scripts\text_create.gml</script>
+    <script>scripts\text_colours.gml</script>
+    <script>scripts\text_draw.gml</script>
   </scripts>
   <fonts name="fonts">
     <font>fonts\fnt_verdana_large</font>

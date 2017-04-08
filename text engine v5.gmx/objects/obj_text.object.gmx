@@ -85,7 +85,7 @@ var _t = text_json[? "top" ];
 var _r = text_json[? "right" ];
 var _b = text_json[? "bottom" ];
 
-scr_juju_text_draw( x, y, text_json );
+text_draw( x, y, text_json );
 </string>
           </argument>
         </arguments>

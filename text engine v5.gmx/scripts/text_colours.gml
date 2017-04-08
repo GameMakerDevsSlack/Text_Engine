@@ -1,4 +1,4 @@
-///scr_juju_text_colours( name )
+///text_colours( name )
 
 switch( argument0 ) {
     
