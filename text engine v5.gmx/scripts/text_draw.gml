@@ -1,8 +1,9 @@
-///text_draw( x, y, json )
+///text_draw( x, y, json, debug )
 
-var _x    = argument0;
-var _y    = argument1;
-var _json = argument2;
+var _x     = argument0;
+var _y     = argument1;
+var _json  = argument2;
+var _debug = argument3;
 
 var _text_font   = _json[? "default font" ];
 var _text_colour = _json[? "default colour" ];
@@ -31,7 +32,7 @@ for( var _i = 0; _i < _lines_size; _i++ ) {
             var _str_y = _line_y + _word_map[? "y" ];
             
             draw_sprite( _word_map[? "sprite" ], 0, _str_x + sprite_get_xoffset( _sprite ), _str_y + sprite_get_yoffset( _sprite ) );
-            //draw_rectangle( _str_x, _str_y, _str_x + _word_map[? "width" ], _str_y + _word_map[? "height" ], true );
+            if ( _debug ) draw_rectangle( _str_x, _str_y, _str_x + _word_map[? "width" ], _str_y + _word_map[? "height" ], true );
             
         } else {
             
@@ -51,17 +52,17 @@ for( var _i = 0; _i < _lines_size; _i++ ) {
             var _str_y = _line_y + _word_map[? "y" ];
             
             draw_text( _str_x, _str_y, _str );
-            //draw_rectangle( _str_x, _str_y, _str_x + _word_map[? "width" ], _str_y + _word_map[? "height" ], true );
+            if ( _debug ) draw_rectangle( _str_x, _str_y, _str_x + _word_map[? "width" ], _str_y + _word_map[? "height" ], true );
             
         }
         
     }
     
-    //draw_rectangle( _line_x, _line_y, _line_x + _line_map[? "width" ], _line_y + _line_map[? "height" ], true );
+    if ( _debug ) draw_rectangle( _line_x, _line_y, _line_x + _line_map[? "width" ], _line_y + _line_map[? "height" ], true );
     
 }
 
-//draw_rectangle( x + _json[? "left" ], y + _json[? "top" ], x + _json[? "right" ], y + _json[? "bottom" ], true );
+if ( _debug ) draw_rectangle( x + _json[? "left" ], y + _json[? "top" ], x + _json[? "right" ], y + _json[? "bottom" ], true );
 
 draw_set_font( fnt_default );
 draw_set_colour( c_black );

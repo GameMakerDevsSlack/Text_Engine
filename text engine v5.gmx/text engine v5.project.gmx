@@ -17,10 +17,9 @@
     <script>scripts\text_draw.gml</script>
   </scripts>
   <fonts name="fonts">
+    <font>fonts\fnt_default</font>
     <font>fonts\fnt_verdana_large</font>
     <font>fonts\fnt_tnr_larger</font>
-    <font>fonts\fnt_test</font>
-    <font>fonts\fnt_default</font>
   </fonts>
   <objects name="objects">
     <object>objects\obj_create</object>
