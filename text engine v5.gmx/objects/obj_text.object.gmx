@@ -39,7 +39,7 @@ var _str = "`Twas [c_red][fnt_tnr_larger]brillig[], and the [spr_test] slithy to
 [c_test]All mimsy were the borogoves[],
 [fnt_tnr_larger]And the mome [spr_test_2] raths outgrabe.";
 
-text_json = text_create( _str, 800, 105, fa_center, fa_middle, fnt_verdana_large, c_black, text_fade_per_word, text_fade_per_line );
+text_json = text_create( _str, 800, 105, fa_center, fa_middle, fnt_verdana_large, c_black, text_fade_per_char, text_fade_per_line );
 </string>
           </argument>
         </arguments>
@@ -111,9 +111,9 @@ if ( mouse_check_button( mb_left ) ) {
 }
 
 if ( text_json[? "transition state" ] == text_state_intro ) or ( text_json[? "transition state" ] == text_state_invisible ) {
-    text_animate_intro( text_json, 0.1 );
+    text_animate_intro( text_json, 1 );
 } else {
-    text_animate_outro( text_json, 0.1 );
+    text_animate_outro( text_json, 0.05 );
 }
 </string>
           </argument>
