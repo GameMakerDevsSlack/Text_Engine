@@ -33,7 +33,7 @@ draw_set_font( _def_font );
 var _space_width = string_width( string_hash_to_newline(" ") );
 if ( !is_real( _line_height ) ) or ( _line_height < 0 ) var _line_height = string_height( string_hash_to_newline(chr(13)) );
 
-_json = ds_map_create();
+var _json = ds_map_create();
 
 var _text_root_list     = ds_list_create();
 ds_map_add_list( _json, "lines"         , _text_root_list );

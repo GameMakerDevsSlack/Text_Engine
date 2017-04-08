@@ -7,4 +7,3 @@
 //  https://creativecommons.org/licenses/by-nc-sa/4.0/
 
 ds_map_destroy( text_json );
-

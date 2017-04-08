@@ -7,4 +7,3 @@
 //  https://creativecommons.org/licenses/by-nc-sa/4.0/
 
 text_draw( x, y, text_json, false );
-

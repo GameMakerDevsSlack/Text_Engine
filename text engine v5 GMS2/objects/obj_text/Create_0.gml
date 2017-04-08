@@ -11,4 +11,3 @@ var _str = @"`Twas [c_red][fnt_tnr_larger]brillig[], and the [spr_test] slithy t
 [fnt_tnr_larger]And the mome [spr_test_2] raths outgrabe.";
 
 text_json = text_create( _str, fnt_verdana_large, 800, 105, fa_center, fa_middle, c_black );
-
