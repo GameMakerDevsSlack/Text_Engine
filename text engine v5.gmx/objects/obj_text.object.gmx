@@ -26,6 +26,14 @@
           <argument>
             <kind>1</kind>
             <string>///Create
+//
+//  April 2017
+//  Juju Adams
+//  julian.adams@email.com
+//  @jujuadams
+//
+//  This code and engine are provided under the Creative Commons "Attribution - NonCommerical - ShareAlike" international license.
+//  https://creativecommons.org/licenses/by-nc-sa/4.0/
 
 x = room_width div 2;
 y = room_height div 2;
@@ -58,6 +66,14 @@ text_json = text_create( _str, fnt_verdana_large, 800, 105, fa_center, fa_middle
           <argument>
             <kind>1</kind>
             <string>///Destroy
+//
+//  April 2017
+//  Juju Adams
+//  julian.adams@email.com
+//  @jujuadams
+//
+//  This code and engine are provided under the Creative Commons "Attribution - NonCommerical - ShareAlike" international license.
+//  https://creativecommons.org/licenses/by-nc-sa/4.0/
 
 ds_map_destroy( text_json );
 </string>
@@ -83,6 +99,14 @@ ds_map_destroy( text_json );
           <argument>
             <kind>1</kind>
             <string>///Step
+//
+//  April 2017
+//  Juju Adams
+//  julian.adams@email.com
+//  @jujuadams
+//
+//  This code and engine are provided under the Creative Commons "Attribution - NonCommerical - ShareAlike" international license.
+//  https://creativecommons.org/licenses/by-nc-sa/4.0/
 
 if ( mouse_check_button( mb_left ) ) {
     x = mouse_x;
@@ -111,6 +135,14 @@ if ( mouse_check_button( mb_left ) ) {
           <argument>
             <kind>1</kind>
             <string>///Draw
+//
+//  April 2017
+//  Juju Adams
+//  julian.adams@email.com
+//  @jujuadams
+//
+//  This code and engine are provided under the Creative Commons "Attribution - NonCommerical - ShareAlike" international license.
+//  https://creativecommons.org/licenses/by-nc-sa/4.0/
 
 text_draw( x, y, text_json, false );
 </string>

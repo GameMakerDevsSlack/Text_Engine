@@ -1,4 +1,12 @@
 ///text_create( string, default font, max width, line height, halign, valign, default colour )
+//
+//  April 2017
+//  Juju Adams
+//  julian.adams@email.com
+//  @jujuadams
+//
+//  This code and engine are provided under the Creative Commons "Attribution - NonCommerical - ShareAlike" international license.
+//  https://creativecommons.org/licenses/by-nc-sa/4.0/
 
 var _str         = argument0;
 var _def_font    = argument1;
