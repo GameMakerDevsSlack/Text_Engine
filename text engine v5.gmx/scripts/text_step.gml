@@ -1,4 +1,4 @@
-///text_step( x, y, json, mouse x, mouse y )
+///text_step( x, y, json, mouse x, mouse y, destroy if invisible )
 //
 //  April 2017
 //  Juju Adams
@@ -13,6 +13,9 @@ var _y       = argument1;
 var _json    = argument2;
 var _mouse_x = argument3;
 var _mouse_y = argument4;
+var _destroy = argument5;
+
+if ( _json < 0 ) return noone;
 
 if ( _json[? "transition state" ] == text_state_intro ) {
     _json[? "transition timer" ] = clamp( _json[? "transition timer" ] + _json[? "intro speed" ], 0, _json[? "intro max" ] );
@@ -35,7 +38,12 @@ for( var _key = ds_map_find_first( _hyperlinks ); _key != undefined; _key = ds_m
     _map[? "clicked" ] = false;
 }
 
-if ( _json[? "transition state" ] != text_state_visible ) exit;
+if ( _json[? "transition state" ] == text_state_invisible ) {
+    ds_map_destroy( _json );
+    return noone;
+}
+
+if ( _json[? "transition state" ] != text_state_visible ) return _json;
 
 var _lines = _json[? "lines" ];
 var _lines_size = ds_list_size( _lines );
@@ -97,3 +105,5 @@ for( var _key = ds_map_find_first( _hyperlinks ); _key != undefined; _key = ds_m
         _map[? "down" ] = false;
     }
 }
+
+return _json;

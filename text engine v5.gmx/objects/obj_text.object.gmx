@@ -106,7 +106,7 @@ ds_map_destroy( text_json );
 //  This code and engine are provided under the Creative Commons "Attribution - NonCommerical - ShareAlike" international license.
 //  https://creativecommons.org/licenses/by-nc-sa/4.0/
 
-text_step( x, y, text_json, mouse_x, mouse_y );
+text_json = text_step( x, y, text_json, mouse_x, mouse_y, true );
 
 if ( os_browser != browser_not_a_browser ) { //Callbacks don't work properly in HTML5 due to obfuscation :(
     if ( text_test_for_click( text_json, "unique name"             ) ) example_do_close();

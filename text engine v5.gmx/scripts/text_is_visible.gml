@@ -10,4 +10,6 @@
 
 var _json = argument0;
 
+if ( _json < 0 ) return false;
+
 return ( _json[? "transition state" ] == text_state_visible );

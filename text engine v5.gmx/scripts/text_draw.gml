@@ -13,6 +13,8 @@ var _y     = argument1;
 var _json  = argument2;
 var _debug = argument3;
 
+if ( _json < 0 ) exit;
+
 var _max_alpha = draw_get_alpha();
 
 var _text_limit  = _json[? "transition timer" ];
