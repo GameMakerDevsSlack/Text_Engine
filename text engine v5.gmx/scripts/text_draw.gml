@@ -23,6 +23,7 @@ var _text_limit  = _json[? "transition timer" ];
 var _text_font   = _json[? "default font" ];
 var _text_colour = _json[? "default colour" ];
 var _intro_style = _json[? "intro style" ];
+var _hyperlinks  = _json[? "hyperlinks" ];
 
 var _max_alpha = draw_get_alpha();
 draw_set_font( _text_font );
@@ -53,6 +54,10 @@ for( var _i = 0; _i < _lines_size; _i++ ) {
         var _word_map = _words[| _j ];
         var _word_length = _word_map[? "length" ];
         
+        var _word_hyperlink = _word_map[? "hyperlink" ];
+        var _hyperlink_map = _hyperlinks[? _word_hyperlink ];
+        if ( _hyperlink_map == undefined ) var _hyperlink_over = false else var _hyperlink_over = _hyperlink_map[? "over" ];
+        
         if ( _intro_style == text_fade_per_word ) {
             draw_set_alpha( _max_alpha * clamp( _text_limit, 0, 1 ) );
             if ( _text_limit <= 0 ) break;
@@ -65,7 +70,8 @@ for( var _i = 0; _i < _lines_size; _i++ ) {
             var _str_y = _line_y + _word_map[? "y" ];
             
             draw_sprite_ext( _word_map[? "sprite" ], 0, _str_x + sprite_get_xoffset( _sprite ), _str_y + sprite_get_yoffset( _sprite ), 1, 1, 0, c_white, draw_get_alpha() );
-            if ( _debug ) draw_rectangle( _str_x, _str_y, _str_x + _word_map[? "width" ], _str_y + _word_map[? "height" ], true );
+            if ( _debug ) or ( _hyperlink_over ) draw_rectangle( _str_x, _str_y, _str_x + _word_map[? "width" ], _str_y + _word_map[? "height" ], !_hyperlink_map[? "down" ] );
+            if ( _hyperlink_map != undefined ) draw_line_width( _str_x, _str_y + _word_map[? "height" ], _str_x + _word_map[? "width" ], _str_y + _word_map[? "height" ], 2 );
             
         } else {
             
@@ -87,7 +93,8 @@ for( var _i = 0; _i < _lines_size; _i++ ) {
             
             if ( _intro_style == text_fade_per_char ) _str = string_copy( _str, 1, _text_limit );
             draw_text( _str_x, _str_y, _str );
-            if ( _debug ) draw_rectangle( _str_x, _str_y, _str_x + _word_map[? "width" ], _str_y + _word_map[? "height" ], true );
+            if ( _debug ) or ( _hyperlink_over ) draw_rectangle( _str_x, _str_y, _str_x + _word_map[? "width" ], _str_y + _word_map[? "height" ], !_hyperlink_map[? "down" ] );
+            if ( _hyperlink_map != undefined ) draw_line_width( _str_x, _str_y + _word_map[? "height" ], _str_x + _word_map[? "width" ], _str_y + _word_map[? "height" ], 2 );
             
         }
         

@@ -15,9 +15,13 @@
     <script>scripts\text_create.gml</script>
     <script>scripts\text_colours.gml</script>
     <script>scripts\text_draw.gml</script>
+    <script>scripts\text_step.gml</script>
     <script>scripts\__text_draw_reverse.gml</script>
     <script>scripts\text_animate_intro.gml</script>
     <script>scripts\text_animate_outro.gml</script>
+    <scripts name="Example scripts">
+      <script>scripts\do_bloop.gml</script>
+    </scripts>
   </scripts>
   <fonts name="fonts">
     <font>fonts\fnt_default</font>

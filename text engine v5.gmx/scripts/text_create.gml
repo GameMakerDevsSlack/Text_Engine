@@ -31,8 +31,10 @@ if ( !is_real( _line_height ) ) or ( _line_height < 0 ) var _line_height = strin
 
 var _json = ds_map_create();
 
-var _text_root_list     = ds_list_create();
+var _text_root_list = ds_list_create();
+var _hyperlink_map = ds_map_create();
 ds_map_add_list( _json, "lines"           , _text_root_list );
+ds_map_add_map(  _json, "hyperlinks"      , _hyperlink_map );
 ds_map_add(      _json, "string"          , _str );
 ds_map_add(      _json, "default font"    , _def_font );
 ds_map_add(      _json, "default colour"  , _def_colour );
@@ -62,8 +64,9 @@ var _line_map = noone;
 var _line_list = noone;
 var _line_length = 0;
 
-var _text_font   = _def_font;
-var _text_colour = _def_colour;
+var _text_font      = _def_font;
+var _text_colour    = _def_colour;
+var _text_hyperlink = "";
 
 //Use spaces as splitting points
 var _sep_pos = string_length( _str ) + 1;
@@ -132,8 +135,9 @@ while( string_length( _str ) > 0 ) {
             if ( _parameters[0] == "" ) {
                 
                 _skip = true;
-                _text_font = _def_font;
-                _text_colour = _def_colour;
+                _text_font      = _def_font;
+                _text_colour    = _def_colour;
+                _text_hyperlink = "";
                 draw_set_font( _text_font );
                 
             } else {
@@ -169,24 +173,54 @@ while( string_length( _str ) > 0 ) {
                 } else {
                     
                     _skip = true;
-                    
-                    //Test if it's a colour
-                    var _colour = text_colours( _parameters[0] );
-                    if ( _colour != noone ) {
+                    if ( _parameters[0] == "link" ) {
                         
-                        _text_colour = _colour;
+                        if ( array_length_1d( _parameters ) >= 2 ) {
+                            
+                            _text_hyperlink = _parameters[1];
+                            
+                            var _map = _hyperlink_map[? _text_hyperlink ];
+                            if ( _map == undefined ) {
+                                
+                                if ( array_length_1d( _parameters ) >= 3 ) {
+                                    
+                                    _map = ds_map_create();
+                                    _map[? "over" ]   = false;
+                                    _map[? "down" ]   = false;
+                                    _map[? "script" ] = asset_get_index( _parameters[2] );
+                                    ds_map_add_map( _hyperlink_map, _text_hyperlink, _map );
+                                    
+                                } else {
+                                    
+                                    _text_hyperlink = "";
+                                    
+                                }
+                                
+                            }
+                            
+                        }
                         
-                    //Test if it's a hexcode
                     } else {
                         
-                        var _colour_string = _parameters[0];
-                        if ( string_length( _colour_string ) <= 7 ) and ( ( string_copy( _colour_string, 1, 1 ) == "#" ) or ( string_copy( _colour_string, 1, 1 ) == "$" ) ) {
+                        //Test if it's a colour
+                        var _colour = text_colours( _parameters[0] );
+                        if ( _colour != noone ) {
                             
-                            var _hex = "0123456789ABCDEF";
-                            var _red   = max( string_pos( string_copy( _colour_string, 3, 1 ), _hex )-1, 0 ) + max( string_pos( string_copy( _colour_string, 2, 1 ), _hex )-1, 0 ) << 4;
-                            var _green = max( string_pos( string_copy( _colour_string, 5, 1 ), _hex )-1, 0 ) + max( string_pos( string_copy( _colour_string, 4, 1 ), _hex )-1, 0 ) << 4;
-                            var _blue  = max( string_pos( string_copy( _colour_string, 7, 1 ), _hex )-1, 0 ) + max( string_pos( string_copy( _colour_string, 6, 1 ), _hex )-1, 0 ) << 4;
-                            _text_colour = make_colour_rgb( _red, _green, _blue );
+                            _text_colour = _colour;
+                            
+                        //Test if it's a hexcode
+                        } else {
+                            
+                            var _colour_string = _parameters[0];
+                            if ( string_length( _colour_string ) <= 7 ) and ( ( string_copy( _colour_string, 1, 1 ) == "#" ) or ( string_copy( _colour_string, 1, 1 ) == "$" ) ) {
+                                
+                                var _hex = "0123456789ABCDEF";
+                                var _red   = max( string_pos( string_copy( _colour_string, 3, 1 ), _hex )-1, 0 ) + max( string_pos( string_copy( _colour_string, 2, 1 ), _hex )-1, 0 ) << 4;
+                                var _green = max( string_pos( string_copy( _colour_string, 5, 1 ), _hex )-1, 0 ) + max( string_pos( string_copy( _colour_string, 4, 1 ), _hex )-1, 0 ) << 4;
+                                var _blue  = max( string_pos( string_copy( _colour_string, 7, 1 ), _hex )-1, 0 ) + max( string_pos( string_copy( _colour_string, 6, 1 ), _hex )-1, 0 ) << 4;
+                                _text_colour = make_colour_rgb( _red, _green, _blue );
+                                
+                            }
                             
                         }
                         
@@ -239,15 +273,16 @@ while( string_length( _str ) > 0 ) {
         
         //Add a new word
         var _map = ds_map_create();
-        ds_map_add( _map, "x"       , _text_x );
-        ds_map_add( _map, "y"       , ( _line_height - _substr_height ) div 2 );
-        ds_map_add( _map, "width"   , _substr_width );
-        ds_map_add( _map, "height"  , _substr_height );
-        ds_map_add( _map, "string"  , _substr );
-        ds_map_add( _map, "sprite"  , _substr_sprite );
-        ds_map_add( _map, "length"  , _substr_length ); //Include the separator character!
-        ds_map_add( _map, "font"    , _text_font );
-        ds_map_add( _map, "colour"  , _text_colour );
+        ds_map_add( _map, "x"        , _text_x );
+        ds_map_add( _map, "y"        , ( _line_height - _substr_height ) div 2 );
+        ds_map_add( _map, "width"    , _substr_width );
+        ds_map_add( _map, "height"   , _substr_height );
+        ds_map_add( _map, "string"   , _substr );
+        ds_map_add( _map, "sprite"   , _substr_sprite );
+        ds_map_add( _map, "length"   , _substr_length ); //Include the separator character!
+        ds_map_add( _map, "font"     , _text_font );
+        ds_map_add( _map, "colour"   , _text_colour );
+        ds_map_add( _map, "hyperlink", _text_hyperlink );
         
         //Add the word to the line list
         ds_list_add( _line_list, _map );
