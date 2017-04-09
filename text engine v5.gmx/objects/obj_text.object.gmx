@@ -42,7 +42,7 @@ This is a [fnt_verdana_32_bold]line of text[] that is much longer than the (800 
 [fnt_tnr_32_italics]It is also possible to insert images [link|unique name|example_do_bloop][spr_test][/link].[]
 [link|another unique name|example_do_close]Click here to close this text[/link] [fnt_tnr_32](or on the grumpy pug [link|yet another unique name|example_do_close][spr_test_2][/link])[].";
 
-text_json = text_create( _str, 800, 90, fa_center, fa_middle, fnt_verdana_32, c_black, text_fade_per_line, 0.05, text_fade_per_char, 1.5 );
+text_json = text_create( _str, 800, 85, fa_center, fa_middle, fnt_verdana_32, c_black, text_fade_per_line, 0.05, text_fade_per_char, 1.5 );
 </string>
           </argument>
         </arguments>
