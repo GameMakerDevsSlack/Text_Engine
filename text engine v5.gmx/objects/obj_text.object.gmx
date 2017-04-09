@@ -73,7 +73,7 @@ text_json = text_create( _str, 800, 105, fa_center, fa_middle, fnt_verdana_large
 //  This code and engine are provided under the Creative Commons "Attribution - NonCommerical - ShareAlike" international license.
 //  https://creativecommons.org/licenses/by-nc-sa/4.0/
 
-ds_map_destroy( text_json );
+if ( text_json &gt;= 0 ) ds_map_destroy( text_json );
 </string>
           </argument>
         </arguments>

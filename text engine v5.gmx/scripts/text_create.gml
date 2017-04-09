@@ -35,31 +35,31 @@ var _json = ds_map_create();
 
 var _text_root_list = ds_list_create();
 var _hyperlink_map = ds_map_create();
-ds_map_add_list( _json, "lines"           , _text_root_list );
-ds_map_add_map(  _json, "hyperlinks"      , _hyperlink_map );
-ds_map_add(      _json, "string"          , _str );
-ds_map_add(      _json, "default font"    , _def_font );
-ds_map_add(      _json, "default colour"  , _def_colour );
-ds_map_add(      _json, "width limit"     , _width_limit );
-ds_map_add(      _json, "line height"     , _line_height );
-ds_map_add(      _json, "halign"          , _halign );
-ds_map_add(      _json, "valign"          , _valign );
-ds_map_add(      _json, "length"          , 0 );
-ds_map_add(      _json, "words"           , 0 );
-ds_map_add(      _json, "width"           , 0 );
-ds_map_add(      _json, "height"          , 0 );
-ds_map_add(      _json, "left"            , 0 );
-ds_map_add(      _json, "top"             , 0 );
-ds_map_add(      _json, "right"           , 0 );
-ds_map_add(      _json, "bottom"          , 0 );
-ds_map_add(      _json, "intro style"     , _intro_style );
-ds_map_add(      _json, "intro max"       , 0 );
-ds_map_add(      _json, "intro speed"     , _intro_speed );
-ds_map_add(      _json, "outro style"     , _outro_style );
-ds_map_add(      _json, "outro max"       , 0 );
-ds_map_add(      _json, "outro speed"     , _outro_speed );
-ds_map_add(      _json, "transition timer", 0 );
-ds_map_add(      _json, "transition state", text_state_intro );
+ds_map_add_list( _json, "lines"     , _text_root_list );
+ds_map_add_map(  _json, "hyperlinks", _hyperlink_map );
+_json[? "string"           ] = _str;
+_json[? "default font"     ] = _def_font;
+_json[? "default colour"   ] = _def_colour;
+_json[? "width limit"      ] = _width_limit;
+_json[? "line height"      ] = _line_height;
+_json[? "halign"           ] = _halign;
+_json[? "valign"           ] = _valign;
+_json[? "length"           ] = 0;
+_json[? "words"            ] = 0;
+_json[? "width"            ] = 0;
+_json[? "height"           ] = 0;
+_json[? "left"             ] = 0;
+_json[? "top"              ] = 0;
+_json[? "right"            ] = 0;
+_json[? "bottom"           ] = 0;
+_json[? "intro style"      ] = _intro_style;
+_json[? "intro max"        ] = 0;
+_json[? "intro speed"      ] = _intro_speed;
+_json[? "outro style"      ] = _outro_style;
+_json[? "outro max"        ] = 0;
+_json[? "outro speed"      ] = _outro_speed;
+_json[? "transition timer" ] = 0;
+_json[? "transition state" ] = text_state_intro;
 
 var _text_x = 0;
 var _text_y = 0;
@@ -258,8 +258,8 @@ while( string_length( _str ) > 0 ) {
             
             if ( _line_map != noone ) {
                 
-                ds_map_replace( _line_map, "width" , _text_x );
-                ds_map_replace( _line_map, "height", _line_height );
+                _line_map[? "width"  ] = _text_x;
+                _line_map[? "height" ] = _line_height;
                 
                 _text_x = 0;
                 _text_y += _line_height;
@@ -270,34 +270,32 @@ while( string_length( _str ) > 0 ) {
             _line_map = ds_map_create();
             _line_list = ds_list_create();
             
-            ds_list_add( _text_root_list, _line_map );
-            ds_list_mark_as_map( _text_root_list, ds_list_size( _text_root_list ) - 1 );
+            ds_list_add( _text_root_list, _line_map ); ds_list_mark_as_map( _text_root_list, ds_list_size( _text_root_list ) - 1 );
             
-            ds_map_add(      _line_map, "x"     , 0 );
-            ds_map_add(      _line_map, "y"     , _text_y );
-            ds_map_add(      _line_map, "width" , 0 );
-            ds_map_add(      _line_map, "height", _line_height );
-            ds_map_add(      _line_map, "length", 0 );
+            _line_map[? "x"      ] = 0;
+            _line_map[? "y"      ] = _text_y;
+            _line_map[? "width"  ] = 0;
+            _line_map[? "height" ] = _line_height;
+            _line_map[? "length" ] = 0;
             ds_map_add_list( _line_map, "words" , _line_list );
             
         }
         
         //Add a new word
         var _map = ds_map_create();
-        ds_map_add( _map, "x"        , _text_x );
-        ds_map_add( _map, "y"        , ( _line_height - _substr_height ) div 2 );
-        ds_map_add( _map, "width"    , _substr_width );
-        ds_map_add( _map, "height"   , _substr_height );
-        ds_map_add( _map, "string"   , _substr );
-        ds_map_add( _map, "sprite"   , _substr_sprite );
-        ds_map_add( _map, "length"   , _substr_length ); //Include the separator character!
-        ds_map_add( _map, "font"     , _text_font );
-        ds_map_add( _map, "colour"   , _text_colour );
-        ds_map_add( _map, "hyperlink", _text_hyperlink );
+        _map[? "x"         ] = _text_x;
+        _map[? "y"         ] = ( _line_height - _substr_height ) div 2;
+        _map[? "width"     ] = _substr_width;
+        _map[? "height"    ] = _substr_height;
+        _map[? "string"    ] = _substr;
+        _map[? "sprite"    ] = _substr_sprite;
+        _map[? "length"    ] = _substr_length; //Include the separator character!
+        _map[? "font"      ] = _text_font;
+        _map[? "colour"    ] = _text_colour;
+        _map[? "hyperlink" ] = _text_hyperlink;
         
         //Add the word to the line list
-        ds_list_add( _line_list, _map );
-        ds_list_mark_as_map( _line_list, ds_list_size( _line_list ) - 1 );
+        ds_list_add( _line_list, _map ); ds_list_mark_as_map( _line_list, ds_list_size( _line_list )-1 );
         
         _text_x += _substr_width;
         if ( _sep_char == " " ) {
@@ -349,8 +347,8 @@ while( string_length( _str ) > 0 ) {
 }
 
 //Finish defining the last line
-ds_map_replace( _line_map, "width" , _text_x );
-ds_map_replace( _line_map, "height", _line_height );
+_line_map[? "width"  ] = _text_x;
+_line_map[? "height" ] = _line_height;
 
 //Textbox width and height
 var _lines_size = ds_list_size( _text_root_list );
