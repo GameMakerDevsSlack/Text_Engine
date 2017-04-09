@@ -173,7 +173,11 @@ while( string_length( _str ) > 0 ) {
                 } else {
                     
                     _skip = true;
-                    if ( _parameters[0] == "link" ) {
+                    if ( _parameters[0] == "/link" ) {
+                        
+                        _text_hyperlink = "";
+                        
+                    } else if ( _parameters[0] == "link" ) {
                         
                         if ( array_length_1d( _parameters ) >= 2 ) {
                             
@@ -182,21 +186,24 @@ while( string_length( _str ) > 0 ) {
                             var _map = _hyperlink_map[? _text_hyperlink ];
                             if ( _map == undefined ) {
                                 
+                                _map = ds_map_create();
+                                ds_map_add_map( _hyperlink_map, _text_hyperlink, _map );
+                                _map[? "over" ] = false;
+                                _map[? "down" ] = false;
+                                
                                 if ( array_length_1d( _parameters ) >= 3 ) {
-                                    
-                                    _map = ds_map_create();
-                                    _map[? "over" ]   = false;
-                                    _map[? "down" ]   = false;
-                                    _map[? "script" ] = asset_get_index( _parameters[2] );
-                                    ds_map_add_map( _hyperlink_map, _text_hyperlink, _map );
-                                    
+                                    _map[? "script name" ] = _parameters[2];
+                                    _map[? "script"      ] = asset_get_index( _parameters[2] );
                                 } else {
-                                    
-                                    _text_hyperlink = "";
-                                    
+                                    _map[? "script name" ] = "";
+                                    _map[? "script"      ] = asset_get_index( "" );
                                 }
                                 
                             }
+                            
+                        } else {
+                            
+                            _text_hyperlink = "";
                             
                         }
                         

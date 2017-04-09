@@ -24,6 +24,7 @@ draw_set_font( _text_font );
 draw_set_colour( _text_colour );
 draw_set_halign( fa_right );
 draw_set_valign( fa_top );
+
 if ( _outro_style == text_fade ) draw_set_alpha( _max_alpha * clamp( _text_limit, 0, 1 ) );
 
 var _lines    = _json[? "lines" ];

@@ -16,6 +16,7 @@
     <script>scripts\text_colours.gml</script>
     <script>scripts\text_draw.gml</script>
     <script>scripts\text_step.gml</script>
+    <script>scripts\text_test_for_click.gml</script>
     <script>scripts\__text_draw_reverse.gml</script>
     <script>scripts\text_animate_intro.gml</script>
     <script>scripts\text_animate_outro.gml</script>

@@ -22,7 +22,10 @@ var _hyperlinks  = _json[? "hyperlinks" ];
 for( var _key = ds_map_find_first( _hyperlinks ); _key != undefined; _key = ds_map_find_next( _hyperlinks, _key ) ) {
     var _map = _hyperlinks[? _key ];
     _map[? "over" ] = false;
+    _map[? "clicked" ] = false;
 }
+
+if ( _json[? "transition state" ] != text_state_visible ) exit;
 
 var _lines = _json[? "lines" ];
 var _lines_size = ds_list_size( _lines );
@@ -77,6 +80,7 @@ for( var _key = ds_map_find_first( _hyperlinks ); _key != undefined; _key = ds_m
             _map[? "down" ] = true;
         } else if ( !mouse_check_button( mb_left ) ) and ( _map[? "down" ] ) {
             _map[? "down" ] = false;
+            _map[? "clicked" ] = true;
             if ( script_exists( _map[? "script" ] ) ) script_execute( _map[? "script" ] );
         }
     } else {
