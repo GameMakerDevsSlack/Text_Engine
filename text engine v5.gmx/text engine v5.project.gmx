@@ -12,22 +12,31 @@
   <backgrounds name="background"/>
   <paths name="paths"/>
   <scripts name="scripts">
-    <script>scripts\text_create.gml</script>
-    <script>scripts\text_step.gml</script>
-    <script>scripts\text_draw.gml</script>
-    <script>scripts\text_do_outro.gml</script>
-    <script>scripts\text_test_for_click.gml</script>
-    <script>scripts\text_is_visible.gml</script>
-    <script>scripts\text_is_invisible.gml</script>
-    <script>scripts\text_colours.gml</script>
+    <scripts name="juju">
+      <scripts name="text">
+        <script>scripts\text_create.gml</script>
+        <script>scripts\text_step.gml</script>
+        <script>scripts\text_draw.gml</script>
+        <script>scripts\text_do_outro.gml</script>
+        <script>scripts\text_test_for_click.gml</script>
+        <script>scripts\text_is_visible.gml</script>
+        <script>scripts\text_is_invisible.gml</script>
+      </scripts>
+      <scripts name="utility">
+        <script>scripts\text_colours.gml</script>
+      </scripts>
+    </scripts>
     <scripts name="Example script">
       <script>scripts\example_do_close.gml</script>
+      <script>scripts\example_do_bloop.gml</script>
     </scripts>
   </scripts>
   <fonts name="fonts">
     <font>fonts\fnt_default</font>
-    <font>fonts\fnt_verdana_large</font>
-    <font>fonts\fnt_tnr_larger</font>
+    <font>fonts\fnt_verdana_32</font>
+    <font>fonts\fnt_verdana_32_bold</font>
+    <font>fonts\fnt_tnr_32</font>
+    <font>fonts\fnt_tnr_32_italics</font>
   </fonts>
   <objects name="objects">
     <object>objects\obj_text</object>

@@ -35,12 +35,14 @@
 //  This code and engine are provided under the Creative Commons "Attribution - NonCommerical - ShareAlike" international license.
 //  https://creativecommons.org/licenses/by-nc-sa/4.0/
 
-var _str = "[$10DF2F]`Twas [c_red][fnt_tnr_larger]brillig[], and the [spr_test] slithy toves
-Did gyre and [link|unique name|example_do_close]gimble in the [c_lime]wabe[]:
-[link|another unique name|example_do_close][c_test]All mimsy were the borogoves[],
-[fnt_tnr_larger]And the mome [link|yet another unique name|example_do_close][spr_test_2][/link] raths outgrabe.";
+var _str = "This is text.
+[$9A23C1]This text is coloured with a hex code[].
+[fnt_tnr_32]This is[] text [c_blue]in [fnt_verdana_32_bold]various [c_red][fnt_tnr_32]styles.[]
+This is a [fnt_verdana_32_bold]line of text[] that is much longer than the (800 pixel) [fnt_verdana_32_bold]maximum width[].
+[fnt_tnr_32_italics]It is also possible to insert images [link|unique name|example_do_bloop][spr_test][/link].[]
+[link|another unique name|example_do_close]Click here to close this text[/link] [fnt_tnr_32](or on the grumpy pug [link|yet another unique name|example_do_close][spr_test_2][/link])[].";
 
-text_json = text_create( _str, 800, 105, fa_center, fa_middle, fnt_verdana_large, c_black, text_fade_per_line, 0.05, text_fade_per_word, 0.1 );
+text_json = text_create( _str, 800, 90, fa_center, fa_middle, fnt_verdana_32, c_black, text_fade_per_line, 0.05, text_fade_per_char, 1.5 );
 </string>
           </argument>
         </arguments>
@@ -109,7 +111,7 @@ if ( text_json &gt;= 0 ) ds_map_destroy( text_json );
 text_json = text_step( x, y, text_json, mouse_x, mouse_y, true );
 
 if ( os_browser != browser_not_a_browser ) { //Callbacks don't work properly in HTML5 due to obfuscation :(
-    if ( text_test_for_click( text_json, "unique name"             ) ) example_do_close();
+    if ( text_test_for_click( text_json, "unique name"             ) ) example_do_bloop();
     if ( text_test_for_click( text_json, "another unique name"     ) ) example_do_close();
     if ( text_test_for_click( text_json, "yet another unique name" ) ) example_do_close();
 }

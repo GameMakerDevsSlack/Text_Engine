@@ -222,13 +222,13 @@ while( string_length( _str ) > 0 ) {
                         //Test if it's a hexcode
                         } else {
                             
-                            var _colour_string = _parameters[0];
+                            var _colour_string = string_upper( _parameters[0] );
                             if ( string_length( _colour_string ) <= 7 ) and ( ( string_copy( _colour_string, 1, 1 ) == "#" ) or ( string_copy( _colour_string, 1, 1 ) == "$" ) ) {
                                 
                                 var _hex = "0123456789ABCDEF";
-                                var _red   = max( string_pos( string_copy( _colour_string, 3, 1 ), _hex )-1, 0 ) + max( string_pos( string_copy( _colour_string, 2, 1 ), _hex )-1, 0 ) << 4;
-                                var _green = max( string_pos( string_copy( _colour_string, 5, 1 ), _hex )-1, 0 ) + max( string_pos( string_copy( _colour_string, 4, 1 ), _hex )-1, 0 ) << 4;
-                                var _blue  = max( string_pos( string_copy( _colour_string, 7, 1 ), _hex )-1, 0 ) + max( string_pos( string_copy( _colour_string, 6, 1 ), _hex )-1, 0 ) << 4;
+                                var _red   = max( string_pos( string_copy( _colour_string, 3, 1 ), _hex )-1, 0 ) + ( max( string_pos( string_copy( _colour_string, 2, 1 ), _hex )-1, 0 ) << 4 );
+                                var _green = max( string_pos( string_copy( _colour_string, 5, 1 ), _hex )-1, 0 ) + ( max( string_pos( string_copy( _colour_string, 4, 1 ), _hex )-1, 0 ) << 4 );
+                                var _blue  = max( string_pos( string_copy( _colour_string, 7, 1 ), _hex )-1, 0 ) + ( max( string_pos( string_copy( _colour_string, 6, 1 ), _hex )-1, 0 ) << 4 );
                                 _text_colour = make_colour_rgb( _red, _green, _blue );
                                 
                             }
