@@ -8,7 +8,7 @@
 //  This code and engine are provided under the Creative Commons "Attribution - NonCommerical - ShareAlike" international license.
 //  https://creativecommons.org/licenses/by-nc-sa/4.0/
 
-switch( argument0 ) {
+switch( string( argument0 ) ) {
     
     case "c_test": return make_colour_rgb( 100, 150, 200 ); break;
     

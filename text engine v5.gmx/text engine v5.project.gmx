@@ -19,7 +19,6 @@
     <script>scripts\text_animate_intro.gml</script>
     <script>scripts\text_animate_outro.gml</script>
   </scripts>
-  <shaders name="shaders"/>
   <fonts name="fonts">
     <font>fonts\fnt_default</font>
     <font>fonts\fnt_verdana_large</font>

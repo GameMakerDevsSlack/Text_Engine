@@ -155,7 +155,7 @@ while( string_length( _str ) > 0 ) {
                         _skip = true;
                         _text_font = _asset;
                         draw_set_font( _text_font );
-                        
+                    
                     //Asset is a colour..?
                     } else {
                         
@@ -164,12 +164,33 @@ while( string_length( _str ) > 0 ) {
                         if ( _colour != noone ) _text_colour = _colour;
                         
                     }
-                    
+                
+                //Not an asset
                 } else {
                     
                     _skip = true;
+                    
+                    //Test if it's a colour
                     var _colour = text_colours( _parameters[0] );
-                    if ( _colour != noone ) _text_colour = _colour;
+                    if ( _colour != noone ) {
+                        
+                        _text_colour = _colour;
+                        
+                    //Test if it's a hexcode
+                    } else {
+                        
+                        var _colour_string = _parameters[0];
+                        if ( string_length( _colour_string ) <= 7 ) and ( ( string_copy( _colour_string, 1, 1 ) == "#" ) or ( string_copy( _colour_string, 1, 1 ) == "$" ) ) {
+                            
+                            var _hex = "0123456789ABCDEF";
+                            var _red   = max( string_pos( string_copy( _colour_string, 3, 1 ), _hex )-1, 0 ) + max( string_pos( string_copy( _colour_string, 2, 1 ), _hex )-1, 0 ) << 4;
+                            var _green = max( string_pos( string_copy( _colour_string, 5, 1 ), _hex )-1, 0 ) + max( string_pos( string_copy( _colour_string, 4, 1 ), _hex )-1, 0 ) << 4;
+                            var _blue  = max( string_pos( string_copy( _colour_string, 7, 1 ), _hex )-1, 0 ) + max( string_pos( string_copy( _colour_string, 6, 1 ), _hex )-1, 0 ) << 4;
+                            _text_colour = make_colour_rgb( _red, _green, _blue );
+                            
+                        }
+                        
+                    }
                     
                 }
                 
