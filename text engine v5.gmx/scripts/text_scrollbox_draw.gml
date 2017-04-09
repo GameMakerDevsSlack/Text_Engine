@@ -12,6 +12,7 @@ var _height           = _scroll_json[? "height"           ];
 var _scrollbar_width  = _scroll_json[? "scrollbar width"  ];
 var _scrollbar_height = _scroll_json[? "scrollbar height" ];
 var _surface          = _scroll_json[? "surface"          ];
+var _colour           = _scroll_json[? "colour"           ];
 
 var _scrollbar_left   = _scroll_json[? "scrollbar left"   ];
 var _scrollbar_top    = _scroll_json[? "scrollbar top"    ];
@@ -34,6 +35,7 @@ var _text_offset_y = -_text_json[? "top"  ];
 
 surface_set_target( _surface );
     
+    draw_set_colour( _colour );
     draw_rectangle( 0, 0, _width, _height, false );
     text_draw( _text_offset_x, _text_offset_y - _scrollbar_t * _scroll_distance, _text_json, false );
     

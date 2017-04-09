@@ -1,4 +1,4 @@
-///text_scrollbox_step( x, y, scrollbox json, text json, mouse x, mouse y )
+///text_scrollbox_step( x, y, scrollbox json, text json, mouse x, mouse y, destroy if invisible )
 
 var _x           = argument0;
 var _y           = argument1;
@@ -6,8 +6,7 @@ var _scroll_json = argument2;
 var _text_json   = argument3;
 var _mouse_x     = argument4;
 var _mouse_y     = argument5;
-
-var _old_colour = draw_get_colour();
+var _destroy     = argument6;
 
 var _width            = _scroll_json[? "width"            ];
 var _height           = _scroll_json[? "height"           ];
@@ -45,3 +44,11 @@ if ( _scrollbar_down ) {
     _scroll_json[? "scrollbar bottom" ] = _scrollbar_y + _scrollbar_height;
     _scroll_json[? "scrollbar t"      ] = clamp( _scrollbar_y / ( _height - _scrollbar_height ), 0, 1 );
 }
+
+if ( _text_json < 0 ) return noone;
+var _scroll_distance = _scroll_json[? "scrollbar t" ] * max( 0, _text_json[? "height" ] - _height );
+if ( !point_in_rectangle( _mouse_x, _mouse_y,    _x, _y, _x + _width, _y + _height ) ) {
+    _mouse_x = -99999999;
+    _mouse_u = -99999999;
+}
+text_step( _x - _text_json[? "left" ], _y - _text_json[? "top" ] - _scroll_distance, _text_json, _mouse_x, _mouse_y, _destroy );

@@ -1,15 +1,17 @@
-///text_scrollbox_create( width, height, scrollbar width, scrollbar height )
+///text_scrollbox_create( width, height, scrollbar width, scrollbar height, colour )
 
 var _width            = argument0;
 var _height           = argument1;
 var _scrollbar_width  = argument2;
 var _scrollbar_height = argument3;
+var _colour           = argument4;
 
 var _scrollbox = ds_map_create();
 _scrollbox[? "width"            ] = _width;
 _scrollbox[? "height"           ] = _height;
 _scrollbox[? "scrollbar width"  ] = _scrollbar_width;
 _scrollbox[? "scrollbar height" ] = _scrollbar_height;
+_scrollbox[? "colour"           ] = _colour;
 _scrollbox[? "surface"          ] = noone;
 _scrollbox[? "scroll offset y"  ] = 0;
 
