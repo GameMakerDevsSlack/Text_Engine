@@ -13,14 +13,15 @@
   <paths name="paths"/>
   <scripts name="scripts">
     <script>scripts\text_create.gml</script>
-    <script>scripts\text_colours.gml</script>
-    <script>scripts\text_draw.gml</script>
     <script>scripts\text_step.gml</script>
+    <script>scripts\text_draw.gml</script>
+    <script>scripts\text_do_outro.gml</script>
     <script>scripts\text_test_for_click.gml</script>
-    <script>scripts\text_animate_intro.gml</script>
-    <script>scripts\text_animate_outro.gml</script>
+    <script>scripts\text_is_visible.gml</script>
+    <script>scripts\text_is_invisible.gml</script>
+    <script>scripts\text_colours.gml</script>
     <scripts name="Example script">
-      <script>scripts\do_bloop.gml</script>
+      <script>scripts\example_do_close.gml</script>
     </scripts>
   </scripts>
   <fonts name="fonts">

@@ -36,11 +36,11 @@
 //  https://creativecommons.org/licenses/by-nc-sa/4.0/
 
 var _str = "[$10DF2F]`Twas [c_red][fnt_tnr_larger]brillig[], and the [spr_test] slithy toves
-Did gyre and [link|unique name|do_bloop]gimble in the [c_lime]wabe[]:
-[link|another unique name|do_bloop][c_test]All mimsy were the borogoves[],
-[fnt_tnr_larger]And the mome [link|unique name][spr_test_2][/link] raths outgrabe.";
+Did gyre and [link|unique name|example_do_close]gimble in the [c_lime]wabe[]:
+[link|another unique name|example_do_close][c_test]All mimsy were the borogoves[],
+[fnt_tnr_larger]And the mome [link|yet another unique name|example_do_close][spr_test_2][/link] raths outgrabe.";
 
-text_json = text_create( _str, 800, 105, fa_center, fa_middle, fnt_verdana_large, c_black, text_fade_per_word, text_fade_per_line );
+text_json = text_create( _str, 800, 105, fa_center, fa_middle, fnt_verdana_large, c_black, text_fade_per_line, 0.05, text_fade_per_word, 0.1 );
 </string>
           </argument>
         </arguments>
@@ -109,15 +109,9 @@ ds_map_destroy( text_json );
 text_step( x, y, text_json, mouse_x, mouse_y );
 
 if ( os_browser != browser_not_a_browser ) { //Callbacks don't work properly in HTML5 due to obfuscation :(
-    if ( text_test_for_click( text_json, "unique name"             ) ) do_bloop();
-    if ( text_test_for_click( text_json, "another unique name"     ) ) do_bloop();
-    if ( text_test_for_click( text_json, "yet another unique name" ) ) do_bloop();
-}
-
-if ( text_json[? "transition state" ] == text_state_intro ) or ( text_json[? "transition state" ] == text_state_invisible ) {
-    text_animate_intro( text_json, 0.05 );
-} else {
-    //text_animate_outro( text_json, 0.05 );
+    if ( text_test_for_click( text_json, "unique name"             ) ) example_do_close();
+    if ( text_test_for_click( text_json, "another unique name"     ) ) example_do_close();
+    if ( text_test_for_click( text_json, "yet another unique name" ) ) example_do_close();
 }
 </string>
           </argument>

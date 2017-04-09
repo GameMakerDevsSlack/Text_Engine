@@ -1,4 +1,4 @@
-///text_create( string, max width, line height, halign, valign, default font, default colour, intro style, outro style )
+///text_create( string, max width, line height, halign, valign, default font, default colour, intro style, intro speed, outro style, outro speed )
 //
 //  April 2017
 //  Juju Adams
@@ -16,7 +16,9 @@ var _valign      = argument4;
 var _def_font    = argument5;
 var _def_colour  = argument6;
 var _intro_style = argument7;
-var _outro_style = argument8;
+var _intro_speed = argument8;
+var _outro_style = argument9;
+var _outro_speed = argument10;
 
 //Replace newlines with #
 _str = string_replace_all( _str, chr(10)+chr(13), chr(13) );
@@ -52,8 +54,10 @@ ds_map_add(      _json, "right"           , 0 );
 ds_map_add(      _json, "bottom"          , 0 );
 ds_map_add(      _json, "intro style"     , _intro_style );
 ds_map_add(      _json, "intro max"       , 0 );
+ds_map_add(      _json, "intro speed"     , _intro_speed );
 ds_map_add(      _json, "outro style"     , _outro_style );
 ds_map_add(      _json, "outro max"       , 0 );
+ds_map_add(      _json, "outro speed"     , _outro_speed );
 ds_map_add(      _json, "transition timer", 0 );
 ds_map_add(      _json, "transition state", text_state_intro );
 

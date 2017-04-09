@@ -14,6 +14,16 @@ var _json    = argument2;
 var _mouse_x = argument3;
 var _mouse_y = argument4;
 
+if ( _json[? "transition state" ] == text_state_intro ) {
+    _json[? "transition timer" ] = clamp( _json[? "transition timer" ] + _json[? "intro speed" ], 0, _json[? "intro max" ] );
+    if ( _json[? "transition timer" ] >= _json[? "intro max" ] ) _json[? "transition state" ] = text_state_visible;
+}
+
+if ( _json[? "transition state" ] == text_state_outro ) {
+    _json[? "transition timer" ] = clamp( _json[? "transition timer" ] - _json[? "outro speed" ], 0, _json[? "outro max" ] );
+    if ( _json[? "transition timer" ] <= 0 ) _json[? "transition state" ] = text_state_invisible;
+}
+
 var _text_limit  = _json[? "transition timer" ];
 var _text_font   = _json[? "default font" ];
 var _text_colour = _json[? "default colour" ];
