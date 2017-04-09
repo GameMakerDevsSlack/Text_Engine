@@ -17,10 +17,15 @@
         <script>scripts\text_create.gml</script>
         <script>scripts\text_step.gml</script>
         <script>scripts\text_draw.gml</script>
+        <script>scripts\text_destroy.gml</script>
         <script>scripts\text_do_outro.gml</script>
         <script>scripts\text_test_for_click.gml</script>
         <script>scripts\text_is_visible.gml</script>
         <script>scripts\text_is_invisible.gml</script>
+        <script>scripts\text_scrollbox_create.gml</script>
+        <script>scripts\text_scrollbox_step.gml</script>
+        <script>scripts\text_scrollbox_draw.gml</script>
+        <script>scripts\text_scrollbox_destroy.gml</script>
       </scripts>
       <scripts name="utility">
         <script>scripts\text_colours.gml</script>
