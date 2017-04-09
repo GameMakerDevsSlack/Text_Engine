@@ -289,7 +289,10 @@ while( string_length( _str ) > 0 ) {
         ds_list_mark_as_map( _line_list, ds_list_size( _line_list ) - 1 );
         
         _text_x += _substr_width;
-        if ( _sep_char == " " ) _text_x += _space_width; //Add spacing if the separation character is a space
+        if ( _sep_char == " " ) {
+            _text_x += _space_width; //Add spacing if the separation character is a space
+            if ( _substr != "" ) _map[? "width" ] += _space_width;
+        }
         
         _line_map[? "length" ] += _substr_length;
         if ( _substr_length > 0 ) _json[? "words" ]++;

@@ -19,7 +19,7 @@
     <script>scripts\__text_draw_reverse.gml</script>
     <script>scripts\text_animate_intro.gml</script>
     <script>scripts\text_animate_outro.gml</script>
-    <scripts name="Example scripts">
+    <scripts name="Example script">
       <script>scripts\do_bloop.gml</script>
     </scripts>
   </scripts>
