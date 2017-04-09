@@ -99,7 +99,7 @@ if ( _json[? "transition state" ] != text_state_outro ) {
             
             if ( _json[? "transition state" ] == text_state_visible ) and ( _hyperlink_map != undefined ) {
                 if ( _hyperlink_map[? "down" ] ) draw_rectangle( _str_x-1, _str_y, _str_x-1 + _word_map[? "width" ], _str_y + _word_map[? "height" ], false );
-                draw_line_width( _str_x-1, _str_y + _word_map[? "height" ], _str_x-1 + _word_map[? "width" ], _str_y + _word_map[? "height" ], 2 );
+                draw_line_width( _str_x-1, _str_y + _word_map[? "height" ]-1, _str_x-1 + _word_map[? "width" ], _str_y + _word_map[? "height" ]-1, 2 );
             }
             
             if ( _intro_style == text_fade_per_char ) {

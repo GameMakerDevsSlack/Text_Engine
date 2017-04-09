@@ -40,12 +40,10 @@ var _str = "This is text.
 [fnt_tnr_32]This is[] text [c_blue]in [fnt_verdana_32_bold]various [c_red][fnt_tnr_32]styles.[]
 This is a [fnt_verdana_32_bold]line of text[] that is much longer than the (800 pixel) [fnt_verdana_32_bold]maximum width[].
 [fnt_tnr_32_italics]It is also possible to insert images [link|unique name|example_do_bloop][spr_test][/link].[]
-[link|another unique name|example_do_close]Click here to close this text[/link] [fnt_tnr_32](or on the grumpy pug [link|yet another unique name|example_do_close][spr_test_2][/link])[].##";
+[link|another unique name|example_do_close]Click here to destroy this text[/link] [fnt_tnr_32](or on the grumpy pug [link|yet another unique name|example_do_close][spr_test_2][/link])[].";
 
-_str += _str;
-
-text_json = text_create( _str, 800, 80, fa_center, fa_top, fnt_verdana_32, c_white, text_fade_per_line, 0.1, text_fade_per_char, 1.5 );
-scrollbox = text_scrollbox_create( 830, 700, 30, 30, c_dkgray );
+text_json = text_create( _str, 800, 100, fa_center, fa_top, fnt_verdana_32, c_white, text_fade_per_line, 0.1, text_fade_per_line, 0.2 );
+scrollbox = text_scrollbox_create( 830, 550, 30, 30, c_gray );
 
 x = ( room_width  - scrollbox[? "width"  ] ) div 2;
 y = ( room_height - scrollbox[? "height" ] ) div 2;
@@ -115,13 +113,17 @@ text_scrollbox_destroy( scrollbox );
 //  This code and engine are provided under the Creative Commons "Attribution - NonCommerical - ShareAlike" international license.
 //  https://creativecommons.org/licenses/by-nc-sa/4.0/
 
-//text_json = text_step( x, y, text_json, mouse_x, mouse_y, true );
 text_json = text_scrollbox_step( x, y, scrollbox, text_json, mouse_x, mouse_y, true );
+if ( text_json &lt; 0 ) {
+    var _str = "Nothing more to see here!#Made by [link|url|example_open_url]@jujuadams";
+    text_json = text_create( _str, 800, 100, fa_left, fa_top, fnt_verdana_32, c_white, text_fade_per_line, 0.1, text_fade_per_line, 0.2 );
+}
 
 if ( os_browser != browser_not_a_browser ) { //Callbacks don't work properly in HTML5 due to obfuscation :(
     if ( text_test_for_click( text_json, "unique name"             ) ) example_do_bloop();
     if ( text_test_for_click( text_json, "another unique name"     ) ) example_do_close();
     if ( text_test_for_click( text_json, "yet another unique name" ) ) example_do_close();
+    if ( text_test_for_click( text_json, "url"                     ) ) example_open_url();
 }
 </string>
           </argument>

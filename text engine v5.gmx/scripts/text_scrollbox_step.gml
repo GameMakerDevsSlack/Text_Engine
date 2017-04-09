@@ -1,4 +1,12 @@
 ///text_scrollbox_step( x, y, scrollbox json, text json, mouse x, mouse y, destroy if invisible )
+//
+//  April 2017
+//  Juju Adams
+//  julian.adams@email.com
+//  @jujuadams
+//
+//  This code and engine are provided under the Creative Commons "Attribution - NonCommerical - ShareAlike" international license.
+//  https://creativecommons.org/licenses/by-nc-sa/4.0/
 
 var _x           = argument0;
 var _y           = argument1;
@@ -45,10 +53,23 @@ if ( _scrollbar_down ) {
     _scroll_json[? "scrollbar t"      ] = clamp( _scrollbar_y / ( _height - _scrollbar_height ), 0, 1 );
 }
 
-if ( _text_json < 0 ) return noone;
-var _scroll_distance = _scroll_json[? "scrollbar t" ] * max( 0, _text_json[? "height" ] - _height );
-if ( !point_in_rectangle( _mouse_x, _mouse_y,    _x, _y, _x + _width, _y + _height ) ) {
-    _mouse_x = -99999999;
-    _mouse_u = -99999999;
+if ( _text_json >= 0 ) {
+    
+    var _scroll_distance = _scroll_json[? "scrollbar t" ] * max( 0, _text_json[? "height" ] - _height );
+    if ( !point_in_rectangle( _mouse_x, _mouse_y,    _x, _y, _x + _width, _y + _height ) ) {
+        _mouse_x = -99999999;
+        _mouse_u = -99999999;
+    }
+    
+    _text_json = text_step( _x - _text_json[? "left" ], _y - _text_json[? "top" ] - _scroll_distance, _text_json, _mouse_x, _mouse_y, _destroy );
+    
 }
-text_step( _x - _text_json[? "left" ], _y - _text_json[? "top" ] - _scroll_distance, _text_json, _mouse_x, _mouse_y, _destroy );
+
+if ( _text_json < 0 ) {
+    _scroll_json[? "scrollbar top"    ] = 0;
+    _scroll_json[? "scrollbar bottom" ] = _scrollbar_height;
+    _scroll_json[? "scrollbar t"      ] = 0;
+    return noone;
+}
+
+return _text_json;

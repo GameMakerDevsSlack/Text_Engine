@@ -34,6 +34,7 @@
     <scripts name="Example script">
       <script>scripts\example_do_close.gml</script>
       <script>scripts\example_do_bloop.gml</script>
+      <script>scripts\example_open_url.gml</script>
     </scripts>
   </scripts>
   <fonts name="fonts">

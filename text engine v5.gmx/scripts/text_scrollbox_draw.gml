@@ -1,4 +1,12 @@
 ///text_scrollbox_draw( x, y, scrollbox json, text json )
+//
+//  April 2017
+//  Juju Adams
+//  julian.adams@email.com
+//  @jujuadams
+//
+//  This code and engine are provided under the Creative Commons "Attribution - NonCommerical - ShareAlike" international license.
+//  https://creativecommons.org/licenses/by-nc-sa/4.0/
 
 var _x           = argument0;
 var _y           = argument1;
@@ -21,7 +29,10 @@ var _scrollbar_bottom = _scroll_json[? "scrollbar bottom" ];
 var _scrollbar_t      = _scroll_json[? "scrollbar t"      ];
 var _scrollbar_down   = _scroll_json[? "scrollbar down"   ];
 
-var _scroll_distance = max( 0, _text_json[? "height" ] - _height );
+if ( _text_json >= 0 ) {
+    var _scroll_distance = max( 0, _text_json[? "height" ] - _height );
+    if ( _scroll_distance > 0 ) _scroll_distance += 10;
+}
 
 if ( !surface_exists( _surface ) ) {
     _surface = surface_create( _width, _height );
@@ -30,14 +41,11 @@ if ( !surface_exists( _surface ) ) {
 
 if ( !surface_exists( _surface ) ) exit;
 
-var _text_offset_x = -_text_json[? "left" ];
-var _text_offset_y = -_text_json[? "top"  ];
-
 surface_set_target( _surface );
     
     draw_set_colour( _colour );
     draw_rectangle( 0, 0, _width, _height, false );
-    text_draw( _text_offset_x, _text_offset_y - _scrollbar_t * _scroll_distance, _text_json, false );
+    if ( _text_json >= 0 ) text_draw( -_text_json[? "left" ], -_text_json[? "top" ] - _scrollbar_t * _scroll_distance, _text_json, false );
     
     draw_set_colour( c_red );
     draw_rectangle( _width - _scrollbar_width, 0, _width, _height, false );

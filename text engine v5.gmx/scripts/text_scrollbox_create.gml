@@ -1,4 +1,12 @@
 ///text_scrollbox_create( width, height, scrollbar width, scrollbar height, colour )
+//
+//  April 2017
+//  Juju Adams
+//  julian.adams@email.com
+//  @jujuadams
+//
+//  This code and engine are provided under the Creative Commons "Attribution - NonCommerical - ShareAlike" international license.
+//  https://creativecommons.org/licenses/by-nc-sa/4.0/
 
 var _width            = argument0;
 var _height           = argument1;
