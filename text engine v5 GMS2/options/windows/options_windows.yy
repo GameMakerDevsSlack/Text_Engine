@@ -7,7 +7,7 @@
     "option_windows_borderless": false,
     "option_windows_company_info": "",
     "option_windows_copyright_info": "",
-    "option_windows_description_info": "A GameMaker:Studio Game",
+    "option_windows_description_info": "",
     "option_windows_display_cursor": true,
     "option_windows_display_name": "GameMaker: Studio",
     "option_windows_enable_steam": false,

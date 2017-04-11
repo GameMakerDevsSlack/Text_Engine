@@ -1,10 +1,4 @@
-/// @param string
-/// @param default_font
-/// @param max_width
-/// @param line_height
-/// @param halign
-/// @param valign
-/// @param default_colour
+///text_create( string, max width, line height, halign, valign, default font, default colour, intro style, intro speed, outro style, outro speed )
 //
 //  April 2017
 //  Juju Adams
@@ -15,19 +9,23 @@
 //  https://creativecommons.org/licenses/by-nc-sa/4.0/
 
 var _str         = argument0;
-var _def_font    = argument1;
-var _width_limit = argument2;
-var _line_height = argument3;
-var _halign      = argument4;
-var _valign      = argument5;
+var _width_limit = argument1;
+var _line_height = argument2;
+var _halign      = argument3;
+var _valign      = argument4;
+var _def_font    = argument5;
 var _def_colour  = argument6;
+var _intro_style = argument7;
+var _intro_speed = argument8;
+var _outro_style = argument9;
+var _outro_speed = argument10;
 
 //Replace newlines with #
 _str = string_replace_all( _str, chr(10)+chr(13), chr(13) );
 _str = string_replace_all( _str, chr(13)+chr(10), chr(13) );
 _str = string_replace_all( _str,         chr(10), chr(13) );
 _str = string_replace_all( _str,             "#", chr(13) );
-_str = string_replace_all( _str,           "\\n", chr(13) );
+_str = string_replace_all( _str,            "\\n", chr(13) );
 
 draw_set_font( _def_font );
 var _space_width = string_width( string_hash_to_newline(" ") );
@@ -35,34 +33,46 @@ if ( !is_real( _line_height ) ) or ( _line_height < 0 ) var _line_height = strin
 
 var _json = ds_map_create();
 
-var _text_root_list     = ds_list_create();
-ds_map_add_list( _json, "lines"         , _text_root_list );
-ds_map_add(      _json, "string"        , _str );
-ds_map_add(      _json, "default font"  , _def_font );
-ds_map_add(      _json, "default colour", _def_colour );
-ds_map_add(      _json, "width limit"   , _width_limit );
-ds_map_add(      _json, "line height"   , _line_height );
-ds_map_add(      _json, "halign"        , _halign );
-ds_map_add(      _json, "valign"        , _valign );
-ds_map_add(      _json, "length"        , 0 );
-ds_map_add(      _json, "width"         , 0 );
-ds_map_add(      _json, "height"        , 0 );
-ds_map_add(      _json, "left"          , 0 );
-ds_map_add(      _json, "top"           , 0 );
-ds_map_add(      _json, "right"         , 0 );
-ds_map_add(      _json, "bottom"        , 0 );
+var _text_root_list = ds_list_create();
+var _hyperlink_map = ds_map_create();
+ds_map_add_list( _json, "lines"     , _text_root_list );
+ds_map_add_map(  _json, "hyperlinks", _hyperlink_map );
+_json[? "string"           ] = _str;
+_json[? "default font"     ] = _def_font;
+_json[? "default colour"   ] = _def_colour;
+_json[? "width limit"      ] = _width_limit;
+_json[? "line height"      ] = _line_height;
+_json[? "halign"           ] = _halign;
+_json[? "valign"           ] = _valign;
+_json[? "length"           ] = 0;
+_json[? "words"            ] = 0;
+_json[? "width"            ] = 0;
+_json[? "height"           ] = 0;
+_json[? "left"             ] = 0;
+_json[? "top"              ] = 0;
+_json[? "right"            ] = 0;
+_json[? "bottom"           ] = 0;
+_json[? "intro style"      ] = _intro_style;
+_json[? "intro max"        ] = 0;
+_json[? "intro speed"      ] = _intro_speed;
+_json[? "outro style"      ] = _outro_style;
+_json[? "outro max"        ] = 0;
+_json[? "outro speed"      ] = _outro_speed;
+_json[? "transition timer" ] = 0;
+_json[? "transition state" ] = text_state_intro;
 
 var _text_x = 0;
 var _text_y = 0;
 
 var _line_map = noone;
 var _line_list = noone;
+var _line_length = 0;
 
-var _text_font   = _def_font;
-var _text_colour = _def_colour;
+var _text_font      = _def_font;
+var _text_colour    = _def_colour;
+var _text_hyperlink = "";
 
 //Use spaces as splitting points
-
 var _sep_pos = string_length( _str ) + 1;
 var _sep_prev_char = "";
 var _sep_char = "";
@@ -103,10 +113,9 @@ while( string_length( _str ) > 0 ) {
     var _substr_height = undefined;
     
     var _substr_length = _sep_pos - 1;
+    var _substr_sprite = noone;
     var _substr = string_copy( _str, 1, _substr_length );
     _str = string_delete( _str, 1, _sep_pos );
-    
-    var _substr_sprite = noone;
     
     //Command handling
     if ( !_skip ) {
@@ -130,8 +139,9 @@ while( string_length( _str ) > 0 ) {
             if ( _parameters[0] == "" ) {
                 
                 _skip = true;
-                _text_font = _def_font;
-                _text_colour = _def_colour;
+                _text_font      = _def_font;
+                _text_colour    = _def_colour;
+                _text_hyperlink = "";
                 draw_set_font( _text_font );
                 
             } else {
@@ -153,7 +163,7 @@ while( string_length( _str ) > 0 ) {
                         _skip = true;
                         _text_font = _asset;
                         draw_set_font( _text_font );
-                        
+                    
                     //Asset is a colour..?
                     } else {
                         
@@ -162,12 +172,70 @@ while( string_length( _str ) > 0 ) {
                         if ( _colour != noone ) _text_colour = _colour;
                         
                     }
-                    
+                
+                //Not an asset
                 } else {
                     
                     _skip = true;
-                    var _colour = text_colours( _parameters[0] );
-                    if ( _colour != noone ) _text_colour = _colour;
+                    if ( _parameters[0] == "/link" ) {
+                        
+                        _text_hyperlink = "";
+                        
+                    } else if ( _parameters[0] == "link" ) {
+                        
+                        if ( array_length_1d( _parameters ) >= 2 ) {
+                            
+                            _text_hyperlink = _parameters[1];
+                            
+                            var _map = _hyperlink_map[? _text_hyperlink ];
+                            if ( _map == undefined ) {
+                                
+                                _map = ds_map_create();
+                                ds_map_add_map( _hyperlink_map, _text_hyperlink, _map );
+                                _map[? "over" ] = false;
+                                _map[? "down" ] = false;
+                                
+                                if ( array_length_1d( _parameters ) >= 3 ) {
+                                    _map[? "script name" ] = _parameters[2];
+                                    _map[? "script"      ] = asset_get_index( _parameters[2] );
+                                } else {
+                                    _map[? "script name" ] = "";
+                                    _map[? "script"      ] = asset_get_index( "" );
+                                }
+                                
+                            }
+                            
+                        } else {
+                            
+                            _text_hyperlink = "";
+                            
+                        }
+                        
+                    } else {
+                        
+                        //Test if it's a colour
+                        var _colour = text_colours( _parameters[0] );
+                        if ( _colour != noone ) {
+                            
+                            _text_colour = _colour;
+                            
+                        //Test if it's a hexcode
+                        } else {
+                            
+                            var _colour_string = string_upper( _parameters[0] );
+                            if ( string_length( _colour_string ) <= 7 ) and ( ( string_copy( _colour_string, 1, 1 ) == "#" ) or ( string_copy( _colour_string, 1, 1 ) == "$" ) ) {
+                                
+                                var _hex = "0123456789ABCDEF";
+                                var _red   = max( string_pos( string_copy( _colour_string, 3, 1 ), _hex )-1, 0 ) + ( max( string_pos( string_copy( _colour_string, 2, 1 ), _hex )-1, 0 ) << 4 );
+                                var _green = max( string_pos( string_copy( _colour_string, 5, 1 ), _hex )-1, 0 ) + ( max( string_pos( string_copy( _colour_string, 4, 1 ), _hex )-1, 0 ) << 4 );
+                                var _blue  = max( string_pos( string_copy( _colour_string, 7, 1 ), _hex )-1, 0 ) + ( max( string_pos( string_copy( _colour_string, 6, 1 ), _hex )-1, 0 ) << 4 );
+                                _text_colour = make_colour_rgb( _red, _green, _blue );
+                                
+                            }
+                            
+                        }
+                        
+                    }
                     
                 }
                 
@@ -188,50 +256,56 @@ while( string_length( _str ) > 0 ) {
         //If we've run over the maximum width of the string
         if ( _substr_width + _text_x > _width_limit ) or ( _line_map == noone ) or ( _sep_prev_char == chr(13) ) {
             
-            if ( _substr_sprite != noone ) show_message( "5  " + sprite_get_name( _substr_sprite ) + ":" + string( _substr_width ) );
-            
             if ( _line_map != noone ) {
                 
-                ds_map_replace( _line_map, "width" , _text_x );
-                ds_map_replace( _line_map, "height", _line_height );
+                _line_map[? "width"  ] = _text_x;
+                _line_map[? "height" ] = _line_height;
                 
                 _text_x = 0;
                 _text_y += _line_height;
+                _line_length = 0;
                 
             }
             
             _line_map = ds_map_create();
             _line_list = ds_list_create();
             
-            ds_list_add( _text_root_list, _line_map );
-            ds_list_mark_as_map( _text_root_list, ds_list_size( _text_root_list ) - 1 );
+            ds_list_add( _text_root_list, _line_map ); ds_list_mark_as_map( _text_root_list, ds_list_size( _text_root_list ) - 1 );
             
-            ds_map_add(      _line_map, "x"     , 0 );
-            ds_map_add(      _line_map, "y"     , _text_y );
-            ds_map_add(      _line_map, "width" , 0 );
-            ds_map_add(      _line_map, "height", _line_height );
+            _line_map[? "x"      ] = 0;
+            _line_map[? "y"      ] = _text_y;
+            _line_map[? "width"  ] = 0;
+            _line_map[? "height" ] = _line_height;
+            _line_map[? "length" ] = 0;
             ds_map_add_list( _line_map, "words" , _line_list );
             
         }
         
         //Add a new word
         var _map = ds_map_create();
-        ds_map_add( _map, "x"       , _text_x );
-        ds_map_add( _map, "y"       , ( _line_height - _substr_height ) div 2 );
-        ds_map_add( _map, "width"   , _substr_width );
-        ds_map_add( _map, "height"  , _substr_height );
-        ds_map_add( _map, "string"  , _substr );
-        ds_map_add( _map, "sprite"  , _substr_sprite );
-        ds_map_add( _map, "length"  , _substr_length + 1 ); //Include the separator character!
-        ds_map_add( _map, "font"    , _text_font );
-        ds_map_add( _map, "colour"  , _text_colour );
+        _map[? "x"         ] = _text_x;
+        _map[? "y"         ] = ( _line_height - _substr_height ) div 2;
+        _map[? "width"     ] = _substr_width;
+        _map[? "height"    ] = _substr_height;
+        _map[? "string"    ] = _substr;
+        _map[? "sprite"    ] = _substr_sprite;
+        _map[? "length"    ] = _substr_length; //Include the separator character!
+        _map[? "font"      ] = _text_font;
+        _map[? "colour"    ] = _text_colour;
+        _map[? "hyperlink" ] = _text_hyperlink;
         
         //Add the word to the line list
-        ds_list_add( _line_list, _map );
-        ds_list_mark_as_map( _line_list, ds_list_size( _line_list ) - 1 );
+        ds_list_add( _line_list, _map ); ds_list_mark_as_map( _line_list, ds_list_size( _line_list )-1 );
         
         _text_x += _substr_width;
-        if ( _sep_char == " " ) _text_x += _space_width; //Add spacing if the separation character is a space
+        if ( _sep_char == " " ) {
+            _text_x += _space_width; //Add spacing if the separation character is a space
+            if ( _substr != "" ) _map[? "width" ] += _space_width;
+        }
+        
+        _line_map[? "length" ] += _substr_length;
+        if ( _substr_length > 0 ) _json[? "words" ]++;
+        _json[? "length" ] += _substr_length;
         
     }
     
@@ -273,8 +347,8 @@ while( string_length( _str ) > 0 ) {
 }
 
 //Finish defining the last line
-ds_map_replace( _line_map, "width" , _text_x );
-ds_map_replace( _line_map, "height", _line_height );
+_line_map[? "width"  ] = _text_x;
+_line_map[? "height" ] = _line_height;
 
 //Textbox width and height
 var _lines_size = ds_list_size( _text_root_list );
@@ -287,11 +361,27 @@ for( var _i = 0; _i < _lines_size; _i++ ) {
 
 var _line_map = _text_root_list[| _lines_size - 1 ];
 var _textbox_height = _line_map[? "y" ] + _line_map[? "height" ];
-    
-_json[? "width" ] = _textbox_width;
+  
+_json[? "width" ]  = _textbox_width;
 _json[? "height" ] = _textbox_height;
 
 
+
+switch( _intro_style ) {
+    case text_no_fade:       _json[? "intro max" ] = 1;                                 break;
+    case text_fade:          _json[? "intro max" ] = 1;                                 break;
+    case text_fade_per_char: _json[? "intro max" ] = _json[? "length" ];                break;
+    case text_fade_per_word: _json[? "intro max" ] = _json[? "words" ];                 break;
+    case text_fade_per_line: _json[? "intro max" ] = ds_list_size( _json[? "lines" ] ); break;
+}
+
+switch( _outro_style ) {
+    case text_no_fade:       _json[? "outro max" ] = 1;                                 break;
+    case text_fade:          _json[? "outro max" ] = 1;                                 break;
+    case text_fade_per_char: _json[? "outro max" ] = _json[? "length" ];                break;
+    case text_fade_per_word: _json[? "outro max" ] = _json[? "words" ];                 break;
+    case text_fade_per_line: _json[? "outro max" ] = ds_list_size( _json[? "lines" ] ); break;
+}
 
 
 //Horizontal justification
