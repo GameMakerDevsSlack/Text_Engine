@@ -35,16 +35,15 @@
 //  This code and engine are provided under the Creative Commons "Attribution - NonCommerical - ShareAlike" international license.
 //  https://creativecommons.org/licenses/by-nc-sa/4.0/
 
-text_system_init( 32, 127, 1024, 10,   fnt_default, fnt_verdana_32, fnt_verdana_32_bold, fnt_tnr_32, fnt_tnr_32_italics, fnt_consolas );
 
 test_mode = 0;
-test_string = "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.";
-test_string = test_string + "##" + test_string + "##" + test_string + "##" + test_string + "##" + test_string;
-
 test_smoothed_timer = 1000;
+text_system_init( 32, 127, 1024, 10,   fnt_default, fnt_verdana_32, fnt_verdana_32_bold, fnt_tnr_32, fnt_tnr_32_italics, fnt_consolas );
 
-text_json = text_create( test_string, 800, 20, fa_left, fa_top, fnt_consolas, c_white, text_no_fade, 0.1, text_no_fade, 0.2 );
 
+lorem_ipsum_string = "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.";
+lorem_ipsum_string = lorem_ipsum_string + "##" + lorem_ipsum_string + "##" + lorem_ipsum_string + "##" + lorem_ipsum_string + "##" + lorem_ipsum_string;
+lorem_ipsum_json = text_create( lorem_ipsum_string, 800, 20, fa_left, fa_top, fnt_consolas, c_white, text_no_fade, 0.1, text_no_fade, 0.2 );
 
 
 var _str = "This is text.
@@ -55,14 +54,15 @@ This is a [fnt_verdana_32_bold]line of text[] that is much longer than the (800 
 [link|another unique name|example_do_close]Click here to destroy this text[/link] [fnt_tnr_32](or on the grumpy pug [link|yet another unique name|example_do_close][spr_test_2][/link])[].";
 introduction_text_json = text_create( _str, 800, 100, fa_center, fa_top, fnt_verdana_32, c_white, text_no_fade, 0.1, text_no_fade, 0.2 );
 
+
 var _str = "Nothing more to see here!#Made by [link|url|example_open_url]@jujuadams";
 outro_text_json = text_create( _str, 800, 100, fa_left, fa_center, fnt_verdana_32, c_white, text_no_fade, 0.1, text_no_fade, 0.2 );
 
 
 scrollbox_focus_text = introduction_text_json;
 scrollbox = text_scrollbox_create( 830, 500, 30, 30, c_gray );
-x = ( room_width  - scrollbox[? "width"  ] ) div 2;
-y = ( room_height - scrollbox[? "height" ] ) div 2;
+scrollbox_x = ( room_width  - scrollbox[? "width"  ] ) div 2;
+scrollbox_y = ( room_height - scrollbox[? "height" ] ) div 2;
 </string>
           </argument>
         </arguments>
@@ -95,7 +95,9 @@ y = ( room_height - scrollbox[? "height" ] ) div 2;
 //  This code and engine are provided under the Creative Commons "Attribution - NonCommerical - ShareAlike" international license.
 //  https://creativecommons.org/licenses/by-nc-sa/4.0/
 
-text_destroy( text_json );
+text_destroy( lorem_ipsum_json );
+text_destroy( introduction_text_json );
+text_destroy( outro_text_json );
 text_scrollbox_destroy( scrollbox );
 </string>
           </argument>
@@ -135,7 +137,7 @@ if ( keyboard_check_pressed( vk_anykey ) ) test_mode = ( test_mode + 1 ) mod 3;
 if ( test_mode == 2 ) {
     
     //This script returns &lt;noone&gt; when the text has fully faded out
-    var _result = text_scrollbox_step( x, y, scrollbox, scrollbox_focus_text, mouse_x, mouse_y, false );
+    var _result = text_scrollbox_step( scrollbox_x, scrollbox_y, scrollbox, scrollbox_focus_text, mouse_x, mouse_y, false );
     if ( _result &lt; 0 ) scrollbox_focus_text = outro_text_json;
     
     if ( os_browser != browser_not_a_browser ) { //Callbacks don't work properly in HTML5 due to obfuscation :(
@@ -146,6 +148,39 @@ if ( test_mode == 2 ) {
     }
 
 }
+</string>
+          </argument>
+        </arguments>
+      </action>
+    </event>
+    <event eventtype="7" enumb="5">
+      <action>
+        <libid>1</libid>
+        <id>603</id>
+        <kind>7</kind>
+        <userelative>0</userelative>
+        <isquestion>0</isquestion>
+        <useapplyto>-1</useapplyto>
+        <exetype>2</exetype>
+        <functionname></functionname>
+        <codestring></codestring>
+        <whoName>self</whoName>
+        <relative>0</relative>
+        <isnot>0</isnot>
+        <arguments>
+          <argument>
+            <kind>1</kind>
+            <string>///Room End
+//
+//  April 2017
+//  Juju Adams
+//  julian.adams@email.com
+//  @jujuadams
+//
+//  This code and engine are provided under the Creative Commons "Attribution - NonCommerical - ShareAlike" international license.
+//  https://creativecommons.org/licenses/by-nc-sa/4.0/
+
+instance_destroy();
 </string>
           </argument>
         </arguments>
@@ -181,24 +216,25 @@ if ( test_mode == 2 ) {
 draw_set_colour( c_white );
 draw_set_font( fnt_consolas );
 
+
 switch( test_mode ) {
     case 0:
         draw_text( 5, 5, "NATIVE" );
         var _sep = string_height( chr(13) );
         var _timer = get_timer();
-        draw_text_ext( 5, 30, test_string, _sep, 800 );
+        draw_text_ext( 15, 40, lorem_ipsum_string, _sep, 800 );
         _timer = get_timer() - _timer;
     break;
     case 1:
         draw_text( 5, 5, "CUSTOM" );
         var _timer = get_timer();
-        text_draw( 5, 30, text_json );
+        text_draw( 15, 40, lorem_ipsum_json );
         _timer = get_timer() - _timer;
     break;
     case 2:
         draw_text( 5, 5, "SCROLLBOX" );
         var _timer = get_timer();
-        text_scrollbox_draw( x, y, scrollbox, scrollbox_focus_text );
+        text_scrollbox_draw( scrollbox_x, scrollbox_y, scrollbox, scrollbox_focus_text );
         _timer = get_timer() - _timer;
     break;
 }
