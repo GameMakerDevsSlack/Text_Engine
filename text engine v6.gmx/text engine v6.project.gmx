@@ -17,7 +17,6 @@
         <script>scripts\text_system_init.gml</script>
         <script>scripts\text_create.gml</script>
         <script>scripts\text_step.gml</script>
-        <script>scripts\text_draw_model.gml</script>
         <script>scripts\text_draw.gml</script>
         <script>scripts\text_destroy.gml</script>
         <script>scripts\text_do_outro.gml</script>

@@ -13,7 +13,7 @@ global.text_font_surface_height = _surface_size;
 var _surface = surface_create( global.text_font_surface_width, global.text_font_surface_height );
 
 surface_set_target( _surface );
-draw_clear_alpha( c_black, 0 );
+draw_clear_alpha( c_white, 0 );
 
 draw_set_colour( c_white );
 draw_rectangle( 0, 0, 1, 1, false );
@@ -53,8 +53,8 @@ for( var _i = 4; _i < argument_count; _i++ ) {
         
         draw_set_alpha( 1 );
         draw_text( _surf_x, _surf_y, _char );
-        draw_set_alpha( 0.5 );
-        draw_text( _surf_x, _surf_y, _char );
+        //draw_set_alpha( 0.5 );
+        //draw_text( _surf_x, _surf_y, _char );
         
         _surf_x += _char_w + _padding;
         _surf_line_height = max( _surf_line_height, _char_h );
