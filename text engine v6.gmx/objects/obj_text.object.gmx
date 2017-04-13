@@ -120,7 +120,8 @@ text_scrollbox_destroy( scrollbox );
 //  This code and engine are provided under the Creative Commons "Attribution - NonCommerical - ShareAlike" international license.
 //  https://creativecommons.org/licenses/by-nc-sa/4.0/
 
-text_json = text_scrollbox_step( x, y, scrollbox, text_json, mouse_x, mouse_y, true );
+//text_json = text_scrollbox_step( x, y, scrollbox, text_json, mouse_x, mouse_y, true );
+text_json = text_step( x, y, text_json, mouse_x, mouse_y, true );
 if ( text_json &lt; 0 ) {
     var _str = "Nothing more to see here!#Made by [link|url|example_open_url]@jujuadams";
     text_json = text_create( _str, 800, 100, fa_left, fa_top, fnt_verdana_32, c_white, text_fade_per_line, 0.1, text_fade_per_line, 0.2 );
@@ -173,6 +174,7 @@ var _a = get_timer();
 _a = get_timer() - _a;
 
 //draw_set_alpha( 0.5 + 0.5 * dsin( current_time/3 ) );
+draw_set_colour( c_white );
 var _b = get_timer();
 text_draw_model( x, y, text_json );
 _b = get_timer() - _b;

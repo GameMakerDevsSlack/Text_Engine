@@ -8,6 +8,8 @@
 //  This code and engine are provided under the Creative Commons "Attribution - NonCommerical - ShareAlike" international license.
 //  https://creativecommons.org/licenses/by-nc-sa/4.0/
 
+var _old_alpha = draw_get_alpha();
+
 var _x     = argument0;
 var _y     = argument1;
 var _json  = argument2;
@@ -44,9 +46,11 @@ for( var _i = 0; _i < _regions; _i++ ) {
     
     if ( _hyperlink_map[? "down" ] ) {
         draw_rectangle( _region_x, _region_y, _region_x + _region_map[? "width" ], _region_y + _region_map[? "height" ], false );
+    } else if ( _hyperlink_map[? "over" ] ) {
+        draw_set_alpha( 0.1*_old_alpha );
+        draw_rectangle( _region_x, _region_y, _region_x + _region_map[? "width" ], _region_y + _region_map[? "height" ], false );
+        draw_set_alpha( _old_alpha );
     }
-    
-    draw_rectangle( _region_x, _region_y, _region_x + _region_map[? "width" ], _region_y + _region_map[? "height" ], true );
     
 }
 
