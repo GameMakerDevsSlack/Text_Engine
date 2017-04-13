@@ -28,7 +28,7 @@
             <string>///Create
 
 test_repeats = 100;
-test_string = "The quick brown fox jumped over the lazy dog."; //#Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.#Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.#Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.#Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.";
+test_string = "The quick brown fox jumped over the lazy dog.#Lorem ipsum dolor sit amet, consectetur adipiscing elit,#sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.#Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.#Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.#Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.";
 
 font_texture_width   = 1024;
 font_texture_height  = 1024;
@@ -38,7 +38,7 @@ font_char_min        = 32;
 font_char_max        = 127;
 font_char_count      = 1 + font_char_max - font_char_min;
 font_background      = noone;
-font_double_render   = true;
+font_double_render   = false;
 
 var _surface = surface_create( font_texture_width, font_texture_height );
 var _surface_x = 0;
@@ -104,20 +104,15 @@ var _uvs = font_uvs_map[? _font ];
 var _str_size = string_length( _str );
 var _newline_height = string_height( chr(13) );
 
-font_model_surface = surface_create( _str_size, 1 );
-surface_set_target( font_model_surface );
-for( var _i = 0; _i &lt; _str_size; _i++ ) {
-    draw_point_colour( _i, 0, merge_colour( c_red, c_blue, _i/(_str_size-1) ) );
-}
-surface_reset_target();
-
 font_model = d3d_model_create();
+font_model_surface = noone;
 d3d_model_primitive_begin( font_model, pr_trianglelist );
 
 repeat( 1 + (font_double_render &gt; 0) ) {
     
     var _str_x = 0;
     var _str_y = 0;
+    font_model_length = 0;
 
     for( var _i = 1; _i &lt;= _str_size; _i++ ) {
         
@@ -126,8 +121,11 @@ repeat( 1 + (font_double_render &gt; 0) ) {
         if ( _ord == 35 ) {
             _str_x = 0;
             _str_y += _newline_height;
+            font_model_length++;
             continue;
         }
+        
+        font_model_length++;
         
         var _index = _ord - font_char_min;
         
@@ -138,7 +136,12 @@ repeat( 1 + (font_double_render &gt; 0) ) {
         var _r = _l + _w / font_texture_width;
         var _b = _t + _h / font_texture_height;
         
-        var _colour = make_colour_rgb( 255*( ( (_i-1) / _str_size ) + ( 1 / (1+_str_size) ) ), 0, 0 );
+        
+        var _ref_x = font_model_length mod 256;
+        var _ref_y = font_model_length div 256;
+        var _colour = make_colour_rgb( 0, _ref_x, _ref_y );
+        show_debug_message( string( _i ) + "," + string( _ref_x ) + "," + string( _ref_y ) + ":" + string( _colour ) );
+        
         d3d_model_vertex_texture_colour( font_model,   _str_x     , _str_y     , 0,   _l, _t,   _colour, 1 );
         d3d_model_vertex_texture_colour( font_model,   _str_x + _w, _str_y     , 0,   _r, _t,   _colour, 1 );
         d3d_model_vertex_texture_colour( font_model,   _str_x     , _str_y + _h, 0,   _l, _b,   _colour, 1 );
@@ -152,6 +155,8 @@ repeat( 1 + (font_double_render &gt; 0) ) {
     }
     
 }
+
+font_model_length++;
 
 d3d_model_primitive_end( font_model );
 draw_set_alpha( 1 );
@@ -179,39 +184,52 @@ draw_set_alpha( 1 );
             <kind>1</kind>
             <string>///Draw
 
-var _str_size = string_length( test_string );
+//if ( !surface_exists( font_model_length ) ) font_model_surface = surface_create( min( 256, font_model_length ), 1 + ( font_model_length div 256 ) );
 
-var _a = get_timer();
-draw_enable_alphablend( false );
-
+//var _a = get_timer();
+/*draw_enable_alphablend( false );
 surface_set_target( font_model_surface );
-for( var _i = 0; _i &lt; _str_size; _i++ ) {
-    draw_set_alpha( 0.5 + 0.5*dsin( _i + current_time/5 ) );
-    draw_point_colour( _i, 0, make_colour_hsv( ( current_time/5 + 2*_i ) mod 256, 255, 255 ) );
+for( var _i = 0; _i &lt; font_model_length; _i++ ) {
+    var _ref_x = _i mod 256;
+    var _ref_y = _i div 256;
+    draw_set_alpha( 0.5 + 0.5*dsin( 10*_i + current_time/5 ) );
+    draw_point_colour( _ref_x, _ref_y, make_colour_hsv( ( current_time/5 + 20*_i ) mod 256, 255, 255 ) );
 }
-draw_set_alpha( 0 );
 surface_reset_target();
 
 draw_set_alpha( 1 );
-draw_enable_alphablend( true );
-_a = get_timer() - _a;
+draw_enable_alphablend( true );*/
+//_a = get_timer() - _a;
+
+var _a = 0;
 
 var _b = get_timer();
-shader_set( shd_font );
-texture_set_stage( shader_get_sampler_index( shd_font, "u_sReference" ), surface_get_texture( font_model_surface ) );
+/*
+shader_set( shd_font_dynamic );
+
+var _w = surface_get_width( font_model_surface );
+var _h = surface_get_height( font_model_surface );
+shader_set_uniform_f( shader_get_uniform( shd_font_dynamic, "u_vReferenceTransform" ), _w, _h );
+
+texture_set_stage( shader_get_sampler_index( shd_font_dynamic, "u_sReference" ), surface_get_texture( font_model_surface ) );
 texture_set_interpolation( true );
-texture_set_interpolation_ext( shader_get_sampler_index( shd_font, "u_sReference" ), false );
+texture_set_interpolation_ext( shader_get_sampler_index( shd_font_dynamic, "u_sReference" ), false );*/
+
 d3d_model_draw( font_model, 5, 35, 0, font_texture );
-shader_reset();
+
 _b = get_timer() - _b;
 
 var _c = get_timer();
 draw_text( 5, 500, test_string );
 _c = get_timer() - _c;
 
-draw_text(   5, 5, _a );
-draw_text( 100, 5, _b );
-draw_text( 200, 5, _c );
+draw_text(   5, 5, string( _a ) + "+" + string( _b ) );
+draw_text( 150, 5, _a+_b );
+draw_text( 250, 5, _c );
+
+texture_set_interpolation( false );
+//draw_surface_ext( font_model_surface, 200, 200, 20, 20, 0, c_white, 1 );
+texture_set_interpolation( true );
 </string>
           </argument>
         </arguments>
