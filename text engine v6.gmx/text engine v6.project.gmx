@@ -31,7 +31,7 @@
         </scripts>
       </scripts>
       <scripts name="utility">
-        <script>scripts\text_colours.gml</script>
+        <script>scripts\string_to_colour.gml</script>
       </scripts>
     </scripts>
     <scripts name="Example script">

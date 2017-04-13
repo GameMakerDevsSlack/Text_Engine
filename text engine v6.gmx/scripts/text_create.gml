@@ -174,7 +174,7 @@ while( string_length( _str ) > 0 ) {
                     } else {
                         
                         _skip = true;
-                        var _colour = text_colours( _parameters[0] );
+                        var _colour = string_to_colour( _parameters[0] );
                         if ( _colour != noone ) _text_colour = _colour;
                         
                     }
@@ -220,7 +220,7 @@ while( string_length( _str ) > 0 ) {
                     } else {
                         
                         //Test if it's a colour
-                        var _colour = text_colours( _parameters[0] );
+                        var _colour = string_to_colour( _parameters[0] );
                         if ( _colour != noone ) {
                             
                             _text_colour = _colour;
