@@ -41,6 +41,8 @@ test_mode = 0;
 test_string = "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.";
 test_string = test_string + "##" + test_string + "##" + test_string + "##" + test_string + "##" + test_string + "##" + test_string + "##" + test_string;
 
+test_smoothed_timer = 1000;
+
 text_json = text_create( test_string, 800, 20, fa_left, fa_top, fnt_consolas, c_white, text_no_fade, 0.1, text_no_fade, 0.2 );
 scrollbox = text_scrollbox_create( 830, 550, 30, 30, c_gray );
 
@@ -200,7 +202,9 @@ switch( test_mode ) {
     break;
 }
 
-draw_text( 200, 5, "render time =" + string_format( _timer, 4, 0 ) + "us" );
+
+test_smoothed_timer = lerp( test_smoothed_timer, _timer, 0.008 );
+draw_text( 200, 5, "render time =" + string_format( _timer, 4, 0 ) + "us // smoothed = " + string_format( test_smoothed_timer, 4, 0 ) );
 draw_set_font( fnt_default );
 </string>
           </argument>
