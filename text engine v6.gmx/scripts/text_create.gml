@@ -64,6 +64,7 @@ _json[? "outro speed"      ] = _outro_speed;
 _json[? "transition timer" ] = 0;
 _json[? "transition state" ] = text_state_intro;
 _json[? "model"            ] = noone;
+_json[? "surface"          ] = noone;
 ds_map_add_list( _json, "model sprites", _model_sprite_list );
 
 var _text_x = 0;
@@ -282,7 +283,7 @@ while( string_length( _str ) > 0 ) {
             _line_map[? "width"  ] = 0;
             _line_map[? "height" ] = _line_height;
             _line_map[? "length" ] = 0;
-            ds_map_add_list( _line_map, "words" , _line_list );
+            ds_map_add_list( _line_map, "words", _line_list );
             
         }
         
