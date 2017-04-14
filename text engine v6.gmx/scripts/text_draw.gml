@@ -1,4 +1,4 @@
-///text_draw( x, y, json )
+///text_draw( x, y, json, fade, smoothness )
 //
 //  April 2017
 //  Juju Adams
@@ -10,16 +10,29 @@
 
 var _old_alpha = draw_get_alpha();
 
-var _x     = argument0;
-var _y     = argument1;
-var _json  = argument2;
+var _x          = argument0;
+var _y          = argument1;
+var _json       = argument2;
+var _fade       = argument3;
+var _smoothness = argument4;
 if ( _json < 0 ) exit;
 
 var _hyperlinks        = _json[? "hyperlinks" ];
 var _hyperlink_regions = _json[? "hyperlink regions" ];
 
-//shader_set( shd_text_alpha );
-//shader_set_uniform_f( shader_get_uniform( shd_text_alpha, "u_fAlpha" ), draw_get_alpha() );
+if ( is_real( _fade ) ) and ( _fade >= 0 ) {
+    shader_set( shd_text_fade );
+    shader_set_uniform_f( shader_get_uniform( shd_text_fade, "u_fTime" ), ( _json[? "model indices" ] + _smoothness ) * _fade );
+    shader_set_uniform_f( shader_get_uniform( shd_text_fade, "u_fSmoothness" ), _smoothness );
+} else {
+    var _colour = draw_get_colour();
+    var _r = colour_get_red( _colour )/255;
+    var _g = colour_get_green( _colour )/255;
+    var _b = colour_get_blue( _colour )/255;
+    var _a = draw_get_alpha();
+    shader_set( shd_text_basic );
+    shader_set_uniform_f( shader_get_uniform( shd_text_basic, "u_vColour" ), _r, _g, _b, _a );
+}
 
 d3d_model_draw( _json[? "model" ], _x, _y, 0, global.text_font_texture );
 
@@ -50,4 +63,4 @@ for( var _i = 0; _i < _regions; _i++ ) {
     
 }
 
-//shader_reset();
+shader_reset();

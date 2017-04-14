@@ -41,7 +41,8 @@
     </scripts>
   </scripts>
   <shaders name="shaders">
-    <shader type="GLSLES">shaders\shd_text_alpha.shader</shader>
+    <shader type="GLSLES">shaders\shd_text_basic.shader</shader>
+    <shader type="GLSLES">shaders\shd_text_fade.shader</shader>
   </shaders>
   <fonts name="fonts">
     <font>fonts\fnt_default</font>

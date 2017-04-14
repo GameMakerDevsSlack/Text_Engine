@@ -7,3 +7,5 @@ if ( _json >= 0 ) {
     if ( surface_exists( _json[? "surface" ] ) ) surface_free( _json[? "surface" ] );
     ds_map_destroy( _json );
 }
+
+return noone;
