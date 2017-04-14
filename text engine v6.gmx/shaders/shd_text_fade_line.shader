@@ -5,7 +5,6 @@ attribute vec2 in_TextureCoord;
 varying vec2 v_vTexcoord;
 varying vec4 v_vColour;
 varying float v_fLine;
-varying float v_fIndex;
 
 void main() {
     
@@ -14,19 +13,20 @@ void main() {
     
     v_vColour = in_Colour;
     v_vTexcoord = in_TextureCoord;
-    v_fIndex = float( int( in_Position.z / 256.0 ) );
-    v_fLine = in_Position.z - v_fIndex*256.0;
+    v_fLine = in_Position.z - 256.0*float( int( in_Position.z / 256.0 ) );
     
 }
 
 //######################_==_YOYO_SHADER_MARKER_==_######################@~varying vec2 v_vTexcoord;
 varying vec4 v_vColour;
 varying float v_fLine;
-varying float v_fIndex;
+
+uniform float u_fTime;
+uniform float u_fSmoothness;
 
 void main() {
     
-    gl_FragColor = vec4( v_vColour.rgb, v_fLine / 34.0 ) * texture2D( gm_BaseTexture, v_vTexcoord );
+    float alpha = max( 0.0, min( 1.0, ( u_fTime - v_fLine ) / u_fSmoothness ) );
+    gl_FragColor = vec4( v_vColour.rgb, alpha ) * texture2D( gm_BaseTexture, v_vTexcoord );
     
 }
-

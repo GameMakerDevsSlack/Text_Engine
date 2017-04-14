@@ -20,21 +20,17 @@ if ( _json < 0 ) exit;
 var _hyperlinks        = _json[? "hyperlinks" ];
 var _hyperlink_regions = _json[? "hyperlink regions" ];
 
-if ( is_real( _fade ) ) and ( _fade >= 0 ) {
-    shader_set( shd_text_fade );
-    shader_set_uniform_f( shader_get_uniform( shd_text_fade, "u_fTime" ), ( _json[? "model indices" ] + _smoothness ) * _fade );
-    shader_set_uniform_f( shader_get_uniform( shd_text_fade, "u_fSmoothness" ), _smoothness );
-} else {
-    var _colour = draw_get_colour();
-    var _r = colour_get_red( _colour )/255;
-    var _g = colour_get_green( _colour )/255;
-    var _b = colour_get_blue( _colour )/255;
-    var _a = draw_get_alpha();
-    shader_set( shd_text_basic );
-    shader_set_uniform_f( shader_get_uniform( shd_text_basic, "u_vColour" ), _r, _g, _b, _a );
-}
-
+//*
+shader_set( shd_text_fade_char );
+shader_set_uniform_f( shader_get_uniform( shd_text_fade_char, "u_fTime" ), ( _json[? "model indices" ] + _smoothness ) * _fade );
+shader_set_uniform_f( shader_get_uniform( shd_text_fade_char, "u_fSmoothness" ), _smoothness );
+/*/
+shader_set( shd_text_fade_line );
+shader_set_uniform_f( shader_get_uniform( shd_text_fade_line, "u_fTime" ), ( ds_list_size( _json[? "lines" ] ) + _smoothness ) * _fade );
+shader_set_uniform_f( shader_get_uniform( shd_text_fade_line, "u_fSmoothness" ), _smoothness );
+//*/
 d3d_model_draw( _json[? "model" ], _x, _y, 0, global.text_font_texture );
+shader_reset();
 
 var _sprite_list = _json[? "model sprites" ];
 var _sprites_size = ds_list_size( _sprite_list );
@@ -62,5 +58,3 @@ for( var _i = 0; _i < _regions; _i++ ) {
     }
     
 }
-
-shader_reset();

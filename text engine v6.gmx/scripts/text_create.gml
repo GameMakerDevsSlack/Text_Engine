@@ -1,4 +1,4 @@
-///text_create( string, max width, line height, halign, valign, default font, default colour, intro style, intro speed, outro style, outro speed, use shader )
+///text_create( string, max width, line height, halign, valign, default font, default colour, intro style, intro speed, outro style, outro speed )
 //
 //  April 2017
 //  Juju Adams
@@ -19,7 +19,6 @@ var _intro_style = argument7;
 var _intro_speed = argument8;
 var _outro_style = argument9;
 var _outro_speed = argument10;
-var _use_shader  = argument11;
 
 //Replace newlines with #
 _str = string_replace_all( _str, chr(10)+chr(13), chr(13) );
@@ -65,7 +64,7 @@ _json[? "outro speed"      ] = _outro_speed;
 _json[? "transition timer" ] = 0;
 _json[? "transition state" ] = text_state_intro;
 _json[? "model"            ] = noone;
-_json[? "surface"          ] = noone;
+_json[? "model indices"    ] = 0;
 ds_map_add_list( _json, "model sprites", _model_sprite_list );
 
 var _text_x = 0;
@@ -553,9 +552,10 @@ draw_set_halign( fa_left );
 draw_set_valign( fa_top );
 
 
-var _texture_index = 0;
-var _texture_x     = 0;
-var _texture_y     = 0;
+var _texture_char = 0;
+var _texture_line = 0;
+var _texture_x    = 0;
+var _texture_y    = 0;
 
 var _lines = _json[? "lines" ];
 var _lines_size = ds_list_size( _lines );
@@ -567,15 +567,6 @@ for( var _i = 0; _i < _lines_size; _i++ ) {
     var _line_x = _line_map[? "x" ];
     var _line_y = _line_map[? "y" ];
     
-    _texture_index++;
-    /*
-    if ( _use_shader ) {
-        _texture_index++;
-        _texture_x = _texture_index mod 256;
-        _texture_y = _texture_index div 256;
-       var _colour = make_colour_rgb( 255, _texture_x, _texture_y );
-    }
-    */
     var _words = _line_map[? "words" ];
     var _words_size = ds_list_size( _words );
     for( var _j = 0; _j < _words_size; _j++ ) {
@@ -600,7 +591,7 @@ for( var _i = 0; _i < _lines_size; _i++ ) {
             
             var _font     = _word_map[? "font" ];
             var _font_uvs = ds_map_find_value( global.text_font_json[? _font ], "uvs" );
-            /*if ( !_use_shader )*/ var _colour = _word_map[? "colour" ];
+            var _colour = _word_map[? "colour" ];
             
             var _str = _word_map[? "string" ];
             var _string_size = string_length( _str );
@@ -608,14 +599,7 @@ for( var _i = 0; _i < _lines_size; _i++ ) {
             var _char_x = _str_x;
             var _char_y = _str_y;
             for( var _k = 1; _k <= _string_size; _k++ ) {
-                /*
-                _texture_index++;
-                if ( _use_shader ) {
-                    _texture_x = _texture_index mod 256;
-                    _texture_y = _texture_index div 256;
-                    _colour = make_colour_rgb( 255, _texture_x, _texture_y );
-                }
-                */
+                
                 var _char = string_copy( _str, _k, 1 );
                 var _ord = ord( _char ) - global.text_font_char_min;
                 
@@ -628,15 +612,17 @@ for( var _i = 0; _i < _lines_size; _i++ ) {
                 var _uv_r   = _uv_l + _char_w / global.text_font_surface_width;
                 var _uv_b   = _uv_t + _char_h / global.text_font_surface_height;
                 
-                d3d_model_vertex_texture_colour( _model,   _char_x        , _char_y        , 0,   _uv_l, _uv_t,   _colour, _texture_index/255 );
-                d3d_model_vertex_texture_colour( _model,   _char_x+_char_w, _char_y        , 0,   _uv_r, _uv_t,   _colour, _texture_index/255 );
-                d3d_model_vertex_texture_colour( _model,   _char_x        , _char_y+_char_h, 0,   _uv_l, _uv_b,   _colour, _texture_index/255 );
+                var _z = _i + ( _texture_char << 8 );
+                d3d_model_vertex_texture_colour( _model,   _char_x        , _char_y        , _z,   _uv_l, _uv_t,   _colour, 1 );
+                d3d_model_vertex_texture_colour( _model,   _char_x+_char_w, _char_y        , _z,   _uv_r, _uv_t,   _colour, 1 );
+                d3d_model_vertex_texture_colour( _model,   _char_x        , _char_y+_char_h, _z,   _uv_l, _uv_b,   _colour, 1 );
                 
-                d3d_model_vertex_texture_colour( _model,   _char_x+_char_w, _char_y        , 0,   _uv_r, _uv_t,   _colour, _texture_index/255 );
-                d3d_model_vertex_texture_colour( _model,   _char_x+_char_w, _char_y+_char_h, 0,   _uv_r, _uv_b,   _colour, _texture_index/255 );
-                d3d_model_vertex_texture_colour( _model,   _char_x        , _char_y+_char_h, 0,   _uv_l, _uv_b,   _colour, _texture_index/255 );
+                d3d_model_vertex_texture_colour( _model,   _char_x+_char_w, _char_y        , _z,   _uv_r, _uv_t,   _colour, 1 );
+                d3d_model_vertex_texture_colour( _model,   _char_x+_char_w, _char_y+_char_h, _z,   _uv_r, _uv_b,   _colour, 1 );
+                d3d_model_vertex_texture_colour( _model,   _char_x        , _char_y+_char_h, _z,   _uv_l, _uv_b,   _colour, 1 );
                 
                 _char_x += _char_w;
+                _texture_char++;
                 
             }
             
@@ -666,6 +652,6 @@ draw_set_colour( c_black );
 
 d3d_model_primitive_end( _model );
 _json[? "model"         ] = _model;
-_json[? "model indices" ] = _texture_index;
+_json[? "model indices" ] = _texture_char;
 
 return _json;

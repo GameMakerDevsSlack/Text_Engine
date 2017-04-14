@@ -44,7 +44,7 @@ text_system_init( 32, 127, 1024, 10,   fnt_default, fnt_verdana_32, fnt_verdana_
 
 lorem_ipsum_string = "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.";
 lorem_ipsum_string = lorem_ipsum_string + "##" + lorem_ipsum_string + "##" + lorem_ipsum_string + "##" + lorem_ipsum_string + "##" + lorem_ipsum_string;
-lorem_ipsum_json = text_create( lorem_ipsum_string, 800, 20, fa_left, fa_top, fnt_consolas, c_white, text_no_fade, 0.1, text_no_fade, 0.2, true );
+lorem_ipsum_json = text_create( lorem_ipsum_string, 800, 20, fa_left, fa_top, fnt_consolas, c_white, text_no_fade, 0.1, text_no_fade, 0.2 );
 
 
 var _str = "This is text.
@@ -53,11 +53,11 @@ var _str = "This is text.
 This is a [fnt_verdana_32_bold]line of text[] that is much longer than the (800 pixel) [fnt_verdana_32_bold]maximum width[].
 [fnt_tnr_32_italics]It is also possible to insert images [link|unique name|example_do_bloop][spr_test][/link].[]
 [link|another unique name|example_do_close]Click here to destroy this text[/link] [fnt_tnr_32](or on the grumpy pug [link|yet another unique name|example_do_close][spr_test_2][/link])[].";
-introduction_text_json = text_create( _str, 800, 100, fa_center, fa_top, fnt_verdana_32, c_white, text_no_fade, 0.1, text_no_fade, 0.2, false );
+introduction_text_json = text_create( _str, 800, 100, fa_center, fa_top, fnt_verdana_32, c_white, text_no_fade, 0.1, text_no_fade, 0.2 );
 
 
 var _str = "Nothing more to see here!#Made by [link|url|example_open_url]@jujuadams";
-outro_text_json = text_create( _str, 800, 100, fa_left, fa_center, fnt_verdana_32, c_white, text_no_fade, 0.1, text_no_fade, 0.2, false );
+outro_text_json = text_create( _str, 800, 100, fa_left, fa_center, fnt_verdana_32, c_white, text_no_fade, 0.1, text_no_fade, 0.2 );
 
 
 scrollbox_focus_text = introduction_text_json;
@@ -216,6 +216,7 @@ instance_destroy();
 
 draw_set_colour( c_white );
 draw_set_font( fnt_consolas );
+
 
 switch( test_mode ) {
     case 0:
