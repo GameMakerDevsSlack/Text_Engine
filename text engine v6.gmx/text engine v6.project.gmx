@@ -34,7 +34,7 @@
         <script>scripts\string_to_colour.gml</script>
       </scripts>
     </scripts>
-    <scripts name="Example script">
+    <scripts name="example scripts">
       <script>scripts\example_do_close.gml</script>
       <script>scripts\example_do_bloop.gml</script>
       <script>scripts\example_open_url.gml</script>

@@ -17,6 +17,9 @@ var _fade       = argument3;
 var _smoothness = argument4;
 if ( _json < 0 ) exit;
 
+if ( !is_real( _fade ) ) _fade = 1;
+if ( !is_real( _smoothness ) ) _smoothness = 0;
+
 var _hyperlinks        = _json[? "hyperlinks" ];
 var _hyperlink_regions = _json[? "hyperlink regions" ];
 

@@ -11,8 +11,8 @@
 var _str         = argument0;
 var _width_limit = argument1;
 var _line_height = argument2;
-var _halign      = argument3;
-var _valign      = argument4;
+var _def_halign  = argument3;
+var _def_valign  = argument4;
 var _def_font    = argument5;
 var _def_colour  = argument6;
 var _intro_style = argument7;
@@ -45,8 +45,8 @@ _json[? "default font"     ] = _def_font;
 _json[? "default colour"   ] = _def_colour;
 _json[? "width limit"      ] = _width_limit;
 _json[? "line height"      ] = _line_height;
-_json[? "halign"           ] = _halign;
-_json[? "valign"           ] = _valign;
+_json[? "halign"           ] = _def_halign;
+_json[? "valign"           ] = _def_valign;
 _json[? "length"           ] = 0;
 _json[? "words"            ] = 0;
 _json[? "width"            ] = 0;
@@ -76,7 +76,10 @@ var _line_length = 0;
 
 var _text_font      = _def_font;
 var _text_colour    = _def_colour;
+var _text_halign    = _def_halign;
+var _text_valign    = _def_valign;
 var _text_hyperlink = "";
+
 
 //Use spaces as splitting points
 var _sep_pos = string_length( _str ) + 1;
@@ -114,9 +117,10 @@ if ( _pos < _sep_pos ) and ( _pos > 0 ) {
 while( string_length( _str ) > 0 ) {
     
     var _skip = false;
+    var _force_newline = false;
     
-    var _substr_width = undefined;
-    var _substr_height = undefined;
+    var _substr_width = 0;
+    var _substr_height = 0;
     
     var _substr_length = _sep_pos - 1;
     var _substr_sprite = noone;
@@ -142,14 +146,41 @@ while( string_length( _str ) > 0 ) {
                 
             }
             
+            //If the dev has used the [] command to reset draw state...
             if ( _parameters[0] == "" ) {
                 
                 _skip = true;
                 _text_font      = _def_font;
                 _text_colour    = _def_colour;
+                _text_halign    = _def_halign;
+                _text_valign    = _def_valign;
                 _text_hyperlink = "";
                 draw_set_font( _text_font );
                 
+            
+                
+            //The command is an alignment keyphrase... set the alignment for the line and force a newline if the previous had content
+            } else if ( _parameters[0] == "fa_left" ) {
+                
+                _text_halign = fa_left;
+                _substr = "";
+                //if ( ds_list_size( _line_list ) > 0 ) _force_newline = true;
+                
+            } else if ( _parameters[0] == "fa_center" ) or ( _parameters[0] == "fa_right" ) {
+                
+                _text_halign = fa_center;
+                _substr = "";
+                //if ( ds_list_size( _line_list ) > 0 ) _force_newline = true;
+            
+            } else if ( _parameters[0] == "fa_right" ) {
+                
+                _text_halign = fa_right;
+                _substr = "";
+                //if ( ds_list_size( _line_list ) > 0 ) _force_newline = true;
+            
+                
+            
+            //If the command is something else...
             } else {
                 
                 var _asset = asset_get_index( _parameters[0] );
@@ -260,7 +291,7 @@ while( string_length( _str ) > 0 ) {
     if ( !_skip ) {
         
         //If we've run over the maximum width of the string
-        if ( _substr_width + _text_x > _width_limit ) or ( _line_map == noone ) or ( _sep_prev_char == chr(13) ) {
+        if ( _substr_width + _text_x > _width_limit ) or ( _line_map == noone ) or ( _sep_prev_char == chr(13) ) or ( _force_newline ) {
             
             if ( _line_map != noone ) {
                 
@@ -283,6 +314,8 @@ while( string_length( _str ) > 0 ) {
             _line_map[? "width"  ] = 0;
             _line_map[? "height" ] = _line_height;
             _line_map[? "length" ] = 0;
+            _line_map[? "halign" ] = _text_halign;
+            _line_map[? "valign" ] = _text_valign;
             ds_map_add_list( _line_map, "words", _line_list );
             
         }
@@ -406,12 +439,12 @@ switch( _outro_style ) {
 
 
 //Horizontal justification
-if ( _halign == fa_left ) {
+if ( _def_halign == fa_left ) {
     
     _json[? "left" ]  = 0;
     _json[? "right" ] = _textbox_width;
     
-} else if ( _halign == fa_center ) {
+} else if ( _def_halign == fa_center ) {
     
     _json[? "left" ]  = -_textbox_width div 2;
     _json[? "right" ] =  _textbox_width div 2;
@@ -429,7 +462,7 @@ if ( _halign == fa_left ) {
         _region_map[? "x" ] -= _line_map[? "width" ] div 2;
     }
     
-} else if ( _halign == fa_right ) {
+} else if ( _def_halign == fa_right ) {
     
     _json[? "left" ]  = -_textbox_width;
     _json[? "right" ] = 0;
@@ -447,7 +480,7 @@ if ( _halign == fa_left ) {
         _region_map[? "x" ] -= _line_map[? "width" ];
     }
     
-} else if ( _halign == fa_center_left ) {
+} else if ( _def_halign == fa_center_left ) {
     
     _json[? "left" ]  = -_textbox_width div 2;
     _json[? "right" ] =  _textbox_width div 2;
@@ -465,7 +498,7 @@ if ( _halign == fa_left ) {
         _region_map[? "x" ] -= _textbox_width div 2;
     }
     
-} else if ( _halign == fa_center_right ) {
+} else if ( _def_halign == fa_center_right ) {
     
     _json[? "left" ]  = -_textbox_width div 2;
     _json[? "right" ] =  _textbox_width div 2;
@@ -486,12 +519,12 @@ if ( _halign == fa_left ) {
 }
 
 //Vertical justification
-if ( _valign == fa_top ) {
+if ( _def_valign == fa_top ) {
     
     _json[? "top" ]    = 0;
     _json[? "bottom" ] = _textbox_height;
 
-} else if ( _valign == fa_middle ) {
+} else if ( _def_valign == fa_middle ) {
     
     _json[? "top" ]    = -_textbox_height div 2;
     _json[? "bottom" ] =  _textbox_height div 2;
@@ -509,7 +542,7 @@ if ( _valign == fa_top ) {
         _region_map[? "y" ] -= _textbox_height div 2;
     }
     
-} else if ( _valign == fa_bottom ) {
+} else if ( _def_valign == fa_bottom ) {
     
     _json[? "top" ]    = -_textbox_height;
     _json[? "bottom" ] = 0;

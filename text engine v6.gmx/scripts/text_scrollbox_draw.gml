@@ -47,7 +47,9 @@ surface_set_target( _surface );
     draw_rectangle( 0, 0, _width, _height, false );
     
     draw_set_colour( c_white );
+    draw_set_colour_write_enable( true, true, true, false );
     if ( _text_json >= 0 ) text_draw( -_text_json[? "left" ], -_text_json[? "top" ] - _scrollbar_t * _scroll_distance, _text_json, DEFAULT, DEFAULT );
+    draw_set_colour_write_enable( true, true, true, true );
     
     draw_set_colour( c_red );
     draw_rectangle( _width - _scrollbar_width, 0, _width, _height, false );
