@@ -16,7 +16,6 @@ void main() {
     v_fLine = in_Position.z - 256.0*float( int( in_Position.z / 256.0 ) );
     
 }
-
 //######################_==_YOYO_SHADER_MARKER_==_######################@~varying vec2 v_vTexcoord;
 varying vec4 v_vColour;
 varying float v_fLine;
