@@ -27,11 +27,12 @@ if ( _json[? "transition state" ] == text_state_outro ) {
     if ( _json[? "transition timer" ] <= 0 ) _json[? "transition state" ] = text_state_invisible;
 }
 
-var _text_limit        = _json[? "transition timer" ];
-var _text_font         = _json[? "default font" ];
-var _text_colour       = _json[? "default colour" ];
-var _hyperlinks        = _json[? "hyperlinks" ];
+var _text_limit        = _json[? "transition timer"  ];
+var _text_font         = _json[? "default font"      ];
+var _text_colour       = _json[? "default colour"    ];
+var _hyperlinks        = _json[? "hyperlinks"        ];
 var _hyperlink_regions = _json[? "hyperlink regions" ];
+var _json_lines        = _json[? "lines"             ];
 
 for( var _key = ds_map_find_first( _hyperlinks ); _key != undefined; _key = ds_map_find_next( _hyperlinks, _key ) ) {
     var _map = _hyperlinks[? _key ];
@@ -49,13 +50,20 @@ if ( _json[? "transition state" ] != text_state_visible ) return _json;
 var _regions = ds_list_size( _hyperlink_regions );
 for( var _i = 0; _i < _regions; _i++ ) {
     
-    var _region_map = _hyperlink_regions[| _i ];
-    
-    var _region_x = _x + _region_map[? "x" ];
-    var _region_y = _y + _region_map[? "y" ];
+    var _region_map    = _hyperlink_regions[| _i ];
     var _hyperlink_map = _hyperlinks[? _region_map[? "hyperlink" ] ];
+    var _region_line   = _region_map[? "line" ];
+    var _region_word   = _region_map[? "word" ];
     
-    if ( _hyperlink_map != undefined ) and ( point_in_rectangle( _mouse_x, _mouse_y, _region_x, _region_y, _region_x + _region_map[? "width" ], _region_y + _region_map[? "height" ] ) ) {
+    var _line_map   = _json_lines[| _region_line ];
+    var _words_list = _line_map[? "words" ];
+    var _word_map   = _words_list[| _region_word ];
+    
+    var _region_x = _x + _line_map[? "x" ] + _word_map[? "x" ];
+    var _region_y = _y + _line_map[? "y" ] + _word_map[? "y" ];
+    if ( _hyperlink_map != undefined ) and ( point_in_rectangle( _mouse_x, _mouse_y,
+                                                                 _region_x, _region_y,
+                                                                 _region_x + _word_map[? "width" ], _region_y + _word_map[? "height" ] ) ) {
         _hyperlink_map[? "over" ] = true;
     }
     

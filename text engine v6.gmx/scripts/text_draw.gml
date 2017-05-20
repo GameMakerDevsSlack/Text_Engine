@@ -22,6 +22,7 @@ if ( !is_real( _smoothness ) ) _smoothness = 0;
 
 var _hyperlinks        = _json[? "hyperlinks" ];
 var _hyperlink_regions = _json[? "hyperlink regions" ];
+var _json_lines        = _json[? "lines"             ];
 
 //*
 shader_set( shd_text_fade_char );
@@ -47,17 +48,24 @@ for( var _i = 0; _i < _sprites_size; _i++ ) {
     
 }
 
+
 var _regions = ds_list_size( _hyperlink_regions );
 for( var _i = 0; _i < _regions; _i++ ) {
     
-    var _region_map = _hyperlink_regions[| _i ];
-    
-    var _region_x = _x + _region_map[? "x" ];
-    var _region_y = _y + _region_map[? "y" ];
+    var _region_map    = _hyperlink_regions[| _i ];
     var _hyperlink_map = _hyperlinks[? _region_map[? "hyperlink" ] ];
+    var _region_line   = _region_map[? "line" ];
+    var _region_word   = _region_map[? "word" ];
+    
+    var _line_map   = _json_lines[| _region_line ];
+    var _words_list = _line_map[? "words" ];
+    var _word_map   = _words_list[| _region_word ];
+    
+    var _region_x = _x + _line_map[? "x" ] + _word_map[? "x" ];
+    var _region_y = _y + _line_map[? "y" ] + _word_map[? "y" ];
     
     if ( _hyperlink_map[? "down" ] ) {
-        draw_rectangle( _region_x, _region_y, _region_x + _region_map[? "width" ], _region_y + _region_map[? "height" ], false );
+        draw_rectangle( _region_x, _region_y, _region_x + _word_map[? "width" ], _region_y + _word_map[? "height" ], false );
     }
     
 }

@@ -114,6 +114,7 @@ if ( _pos < _sep_pos ) and ( _pos > 0 ) {
     var _sep_pos = _pos;
 }
 
+//Iterate over the entire string
 while( string_length( _str ) > 0 ) {
     
     var _skip = false;
@@ -343,12 +344,13 @@ while( string_length( _str ) > 0 ) {
         //If we've got a word with a hyperlink, add it to our list of hyperlink regions
         if ( _text_hyperlink != "" ) {
             var _region_map = ds_map_create();
-            _region_map[? "x"         ] = _map[? "x"         ];
+            /*_region_map[? "x"         ] = _map[? "x"         ];
             _region_map[? "y"         ] = _map[? "y"         ] + _text_y;
             _region_map[? "width"     ] = _map[? "width"     ];
-            _region_map[? "height"    ] = _map[? "height"    ];
-            _region_map[? "hyperlink" ] = _map[? "hyperlink" ];
+            _region_map[? "height"    ] = _map[? "height"    ];*/
+            _region_map[? "hyperlink" ] = _text_hyperlink;
             _region_map[? "line"      ] = ds_list_size( _text_root_list )-1;
+            _region_map[? "word"      ] = ds_list_size( _line_list );
             ds_list_add( _hyperlink_regions_list, _region_map );
             ds_list_mark_as_map( _hyperlink_regions_list, ds_list_size( _hyperlink_regions_list )-1 );
         }
@@ -508,12 +510,13 @@ if ( _def_valign == fa_top ) {
     }
     
     //Adjust hyperlink region positions
+    /*
     for( var _i = 0; _i < _hyperlink_region_size; _i++ ) {
         var _region_map = _hyperlink_regions_list[| _i ];
         var _line_map = _text_root_list[| _region_map[? "line" ] ];
         _region_map[? "y" ] -= _textbox_height div 2;
     }
-    
+    */
 } else if ( _def_valign == fa_bottom ) {
     
     _json[? "top" ]    = -_textbox_height;
@@ -526,12 +529,13 @@ if ( _def_valign == fa_top ) {
     }
     
     //Adjust hyperlink region positions
+    /*
     for( var _i = 0; _i < _hyperlink_region_size; _i++ ) {
         var _region_map = _hyperlink_regions_list[| _i ];
         var _line_map = _text_root_list[| _region_map[? "line" ] ];
         _region_map[? "y" ] -= _textbox_height;
     }
-    
+    */
 }
 
 
