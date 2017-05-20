@@ -1,4 +1,4 @@
-///text_create( string, max width, line height, halign, valign, default font, default colour, intro style, intro speed, outro style, outro speed )
+///text_create( string, default font, default colour, default halign, box width, line height, box halign, box valign )
 //
 //  April 2017
 //  Juju Adams
@@ -9,16 +9,13 @@
 //  https://creativecommons.org/licenses/by-nc-sa/4.0/
 
 var _str         = argument0;
-var _width_limit = argument1;
-var _line_height = argument2;
+var _def_font    = argument1;
+var _def_colour  = argument2;
 var _def_halign  = argument3;
-var _def_valign  = argument4;
-var _def_font    = argument5;
-var _def_colour  = argument6;
-var _intro_style = argument7;
-var _intro_speed = argument8;
-var _outro_style = argument9;
-var _outro_speed = argument10;
+var _width_limit = argument4;
+var _line_height = argument5;
+var _box_halign  = argument6;
+var _box_valign  = argument7;
 
 //Replace newlines with single characters
 _str = string_replace_all( _str, chr(10)+chr(13), chr(13) );
@@ -36,17 +33,18 @@ var _json = ds_map_create();
 var _text_root_list         = ds_list_create();
 var _hyperlink_map          = ds_map_create();
 var _hyperlink_regions_list = ds_list_create();
-var _model_sprite_list      = ds_list_create();
+var _vbuff_sprite_list      = ds_list_create();
 ds_map_add_list( _json, "lines"            , _text_root_list );
 ds_map_add_map(  _json, "hyperlinks"       , _hyperlink_map );
 ds_map_add_list( _json, "hyperlink regions", _hyperlink_regions_list );
+ds_map_add_list( _json, "vbuff sprites"    , _vbuff_sprite_list );
 _json[? "string"           ] = _str;
 _json[? "default font"     ] = _def_font;
 _json[? "default colour"   ] = _def_colour;
 _json[? "width limit"      ] = _width_limit;
 _json[? "line height"      ] = _line_height;
-_json[? "halign"           ] = _def_halign;
-_json[? "valign"           ] = _def_valign;
+_json[? "halign"           ] = _box_halign;
+_json[? "valign"           ] = _box_valign;
 _json[? "length"           ] = 0;
 _json[? "words"            ] = 0;
 _json[? "width"            ] = 0;
@@ -55,17 +53,16 @@ _json[? "left"             ] = 0;
 _json[? "top"              ] = 0;
 _json[? "right"            ] = 0;
 _json[? "bottom"           ] = 0;
-_json[? "intro style"      ] = _intro_style;
+_json[? "intro style"      ] = text_no_fade;
 _json[? "intro max"        ] = 0;
-_json[? "intro speed"      ] = _intro_speed;
-_json[? "outro style"      ] = _outro_style;
+_json[? "intro speed"      ] = 0.1;
+_json[? "outro style"      ] = text_no_fade;
 _json[? "outro max"        ] = 0;
-_json[? "outro speed"      ] = _outro_speed;
+_json[? "outro speed"      ] = 0.1;
 _json[? "transition timer" ] = 0;
 _json[? "transition state" ] = text_state_intro;
-_json[? "model"            ] = noone;
-_json[? "model indices"    ] = 0;
-ds_map_add_list( _json, "model sprites", _model_sprite_list );
+_json[? "vertex buffer"    ] = noone;
+_json[? "vbuff chars"      ] = 0;
 
 var _text_x = 0;
 var _text_y = 0;
@@ -77,11 +74,11 @@ var _line_length = 0;
 var _text_font      = _def_font;
 var _text_colour    = _def_colour;
 var _text_halign    = _def_halign;
-var _text_valign    = _def_valign;
 var _text_hyperlink = "";
 
 
-//Use spaces as splitting points
+
+//Find the first separator
 var _sep_pos = string_length( _str ) + 1;
 var _sep_prev_char = "";
 var _sep_char = "";
@@ -114,7 +111,9 @@ if ( _pos < _sep_pos ) and ( _pos > 0 ) {
     var _sep_pos = _pos;
 }
 
-//Iterate over the entire string
+
+
+//Iterate over the entire string...
 while( string_length( _str ) > 0 ) {
     
     var _skip = false;
@@ -167,13 +166,6 @@ while( string_length( _str ) > 0 ) {
                 
                 
             //The command is an alignment keyphrase... set the alignment for the line and force a newline if the previous had content
-            } else if ( _parameters[0] == "fa" ) {
-                
-                _skip = true;
-                _text_halign = _def_halign;
-                _text_valign = _def_valign;
-                if ( _line_map != noone ) _line_map[? "halign" ] = _text_halign;
-                
             } else if ( _parameters[0] == "fa_left" ) and ( _first_character ) {
                 
                 _text_halign = fa_left;
@@ -329,7 +321,6 @@ while( string_length( _str ) > 0 ) {
             _line_map[? "height" ] = _line_height;
             _line_map[? "length" ] = 0;
             _line_map[? "halign" ] = _text_halign;
-            _line_map[? "valign" ] = _text_valign;
             ds_map_add_list( _line_map, "words", _line_list );
             
         }
@@ -430,48 +421,6 @@ _json[? "height" ] = _textbox_height;
 
 var _hyperlink_region_size = ds_list_size( _hyperlink_regions_list );
 
-
-//Figure out limits for transition animation depending on type
-switch( _intro_style ) {
-    case text_no_fade:       _json[? "intro max" ] = 1;                                 break;
-    case text_fade:          _json[? "intro max" ] = 1;                                 break;
-    case text_fade_per_char: _json[? "intro max" ] = _json[? "length" ];                break;
-    case text_fade_per_word: _json[? "intro max" ] = _json[? "words" ];                 break;
-    case text_fade_per_line: _json[? "intro max" ] = ds_list_size( _json[? "lines" ] ); break;
-}
-
-switch( _outro_style ) {
-    case text_no_fade:       _json[? "outro max" ] = 1;                                 break;
-    case text_fade:          _json[? "outro max" ] = 1;                                 break;
-    case text_fade_per_char: _json[? "outro max" ] = _json[? "length" ];                break;
-    case text_fade_per_word: _json[? "outro max" ] = _json[? "words" ];                 break;
-    case text_fade_per_line: _json[? "outro max" ] = ds_list_size( _json[? "lines" ] ); break;
-}
-
-
-/*
-//Horizontal justification
-if ( _def_halign == fa_left ) {
-    
-    _json[? "left" ]  = 0;
-    _json[? "right" ] = _textbox_width;
-    
-} else if ( _def_halign == fa_center ) {
-    
-    _json[? "left" ]  = -_textbox_width div 2;
-    _json[? "right" ] =  _textbox_width div 2;
-    
-} else if ( _def_halign == fa_right ) {
-    _json[? "left" ]  = -_textbox_width;
-    _json[? "right" ] = 0;
-} else if ( _def_halign == fa_center_left ) {
-    _json[? "left" ]  = -_textbox_width div 2;
-    _json[? "right" ] =  _textbox_width div 2;
-} else if ( _def_halign == fa_center_right ) {
-    _json[? "left" ]  = -_textbox_width div 2;
-    _json[? "right" ] =  _textbox_width div 2;
-}
-*/
 //Adjust word positions
 for( var _i = 0; _i < _lines_size; _i++ ) {
     
@@ -494,13 +443,31 @@ for( var _i = 0; _i < _lines_size; _i++ ) {
 
 
 
+//Horizontal justification
+if ( _box_halign == fa_left ) {
+    
+    _json[? "left" ]  = 0;
+    _json[? "right" ] = _textbox_width;
+    
+} else if ( _box_halign == fa_center ) {
+    
+    _json[? "left" ]  = -_textbox_width div 2;
+    _json[? "right" ] =  _textbox_width div 2;
+    
+} else if ( _box_halign == fa_right ) {
+    
+    _json[? "left" ]  = -_textbox_width;
+    _json[? "right" ] = 0;
+    
+}
+
 //Vertical justification
-if ( _def_valign == fa_top ) {
+if ( _box_valign == fa_top ) {
     
     _json[? "top" ]    = 0;
     _json[? "bottom" ] = _textbox_height;
 
-} else if ( _def_valign == fa_middle ) {
+} else if ( _box_valign == fa_middle ) {
     
     _json[? "top" ]    = -_textbox_height div 2;
     _json[? "bottom" ] =  _textbox_height div 2;
@@ -511,7 +478,7 @@ if ( _def_valign == fa_top ) {
         _line_map[? "y" ] -= _textbox_height div 2;
     }
     
-} else if ( _def_valign == fa_bottom ) {
+} else if ( _box_valign == fa_bottom ) {
     
     _json[? "top" ]    = -_textbox_height;
     _json[? "bottom" ] = 0;
@@ -532,8 +499,8 @@ if ( _def_valign == fa_top ) {
 
 
 //Build precached text model
-var _model = d3d_model_create();
-d3d_model_primitive_begin( _model, pr_trianglelist );
+var _vbuff = vertex_create_buffer();
+vertex_begin( _vbuff, global.text_font_vertex_format );
 
 var _max_alpha = draw_get_alpha();
 
@@ -545,7 +512,6 @@ draw_set_font( _text_font );
 draw_set_colour( _text_colour );
 draw_set_halign( fa_left );
 draw_set_valign( fa_top );
-
 
 var _texture_char = 0;
 var _texture_line = 0;
@@ -579,8 +545,8 @@ for( var _i = 0; _i < _lines_size; _i++ ) {
             _sprite_map[? "y"      ] = _str_y + sprite_get_yoffset( _sprite );
             _sprite_map[? "sprite" ] = _sprite;
             
-            ds_list_add( _model_sprite_list, _sprite_map );
-            ds_list_mark_as_map( _model_sprite_list, ds_list_size( _model_sprite_list )-1 );
+            ds_list_add( _vbuff_sprite_list, _sprite_map );
+            ds_list_mark_as_map( _vbuff_sprite_list, ds_list_size( _vbuff_sprite_list )-1 );
             
         } else {
             
@@ -608,13 +574,14 @@ for( var _i = 0; _i < _lines_size; _i++ ) {
                 var _uv_b   = _uv_t + _char_h / global.text_font_surface_height;
                 
                 var _z = _i + ( _texture_char << 8 );
-                d3d_model_vertex_texture_colour( _model,   _char_x        , _char_y        , _z,   _uv_l, _uv_t,   _colour, 1 );
-                d3d_model_vertex_texture_colour( _model,   _char_x+_char_w, _char_y        , _z,   _uv_r, _uv_t,   _colour, 1 );
-                d3d_model_vertex_texture_colour( _model,   _char_x        , _char_y+_char_h, _z,   _uv_l, _uv_b,   _colour, 1 );
                 
-                d3d_model_vertex_texture_colour( _model,   _char_x+_char_w, _char_y        , _z,   _uv_r, _uv_t,   _colour, 1 );
-                d3d_model_vertex_texture_colour( _model,   _char_x+_char_w, _char_y+_char_h, _z,   _uv_r, _uv_b,   _colour, 1 );
-                d3d_model_vertex_texture_colour( _model,   _char_x        , _char_y+_char_h, _z,   _uv_l, _uv_b,   _colour, 1 );
+                vertex_position_3d( _vbuff, _char_x        , _char_y        , _z ); vertex_colour( _vbuff, _colour, 1 ); vertex_texcoord( _vbuff, _uv_l, _uv_t );
+                vertex_position_3d( _vbuff, _char_x+_char_w, _char_y        , _z ); vertex_colour( _vbuff, _colour, 1 ); vertex_texcoord( _vbuff, _uv_r, _uv_t );
+                vertex_position_3d( _vbuff, _char_x        , _char_y+_char_h, _z ); vertex_colour( _vbuff, _colour, 1 ); vertex_texcoord( _vbuff, _uv_l, _uv_b );
+                
+                vertex_position_3d( _vbuff, _char_x+_char_w, _char_y        , _z ); vertex_colour( _vbuff, _colour, 1 ); vertex_texcoord( _vbuff, _uv_r, _uv_t );
+                vertex_position_3d( _vbuff, _char_x+_char_w, _char_y+_char_h, _z ); vertex_colour( _vbuff, _colour, 1 ); vertex_texcoord( _vbuff, _uv_r, _uv_b );
+                vertex_position_3d( _vbuff, _char_x        , _char_y+_char_h, _z ); vertex_colour( _vbuff, _colour, 1 ); vertex_texcoord( _vbuff, _uv_l, _uv_b );
                 
                 _char_x += _char_w;
                 _texture_char++;
@@ -628,13 +595,13 @@ for( var _i = 0; _i < _lines_size; _i++ ) {
             var _word_w = _word_map[? "width" ];
             var _word_h = _word_map[? "height" ];
             
-            d3d_model_vertex_texture_colour( _model,   _str_x        , _str_y+_word_h-1, 0,   0, 0,   _colour, 1 );
-            d3d_model_vertex_texture_colour( _model,   _str_x+_word_w, _str_y+_word_h-1, 0,   0, 0,   _colour, 1 );
-            d3d_model_vertex_texture_colour( _model,   _str_x        , _str_y+_word_h+1, 0,   0, 0,   _colour, 1 );
+            vertex_position_3d( _vbuff, _str_x        , _str_y+_word_h-1, _z ); vertex_colour( _vbuff, _colour, 1 ); vertex_texcoord( _vbuff, 0, 0 );
+            vertex_position_3d( _vbuff, _str_x+_word_w, _str_y+_word_h-1, _z ); vertex_colour( _vbuff, _colour, 1 ); vertex_texcoord( _vbuff, 0, 0 );
+            vertex_position_3d( _vbuff, _str_x        , _str_y+_word_h+1, _z ); vertex_colour( _vbuff, _colour, 1 ); vertex_texcoord( _vbuff, 0, 0 );
             
-            d3d_model_vertex_texture_colour( _model,   _str_x+_word_w, _str_y+_word_h-1, 0,   0, 0,   _colour, 1 );
-            d3d_model_vertex_texture_colour( _model,   _str_x+_word_w, _str_y+_word_h+1, 0,   0, 0,   _colour, 1 );
-            d3d_model_vertex_texture_colour( _model,   _str_x        , _str_y+_word_h+1, 0,   0, 0,   _colour, 1 );
+            vertex_position_3d( _vbuff, _str_x+_word_w, _str_y+_word_h-1, _z ); vertex_colour( _vbuff, _colour, 1 ); vertex_texcoord( _vbuff, 0, 0 );
+            vertex_position_3d( _vbuff, _str_x+_word_w, _str_y+_word_h+1, _z ); vertex_colour( _vbuff, _colour, 1 ); vertex_texcoord( _vbuff, 0, 0 );
+            vertex_position_3d( _vbuff, _str_x        , _str_y+_word_h+1, _z ); vertex_colour( _vbuff, _colour, 1 ); vertex_texcoord( _vbuff, 0, 0 );
             
         }
         
@@ -645,8 +612,8 @@ for( var _i = 0; _i < _lines_size; _i++ ) {
 draw_set_font( fnt_default );
 draw_set_colour( c_black );
 
-d3d_model_primitive_end( _model );
-_json[? "model"         ] = _model;
-_json[? "model indices" ] = _texture_char;
+vertex_end( _vbuff );
+_json[? "vertex buffer" ] = _vbuff;
+_json[? "vbuff chars"   ] = _texture_char;
 
 return _json;

@@ -1,12 +1,12 @@
-///text_system_init( char min, chat max, surface size, padding, font, [font]... )
+///text_system_init( char min, char max, surface size, padding, font, [font]... )
 
 global.text_font_char_min  = argument[0];
 global.text_font_char_max  = argument[1];
+var _surface_size          = argument[2];
+var _padding               = argument[3];
+
 global.text_font_char_size = 1 + global.text_font_char_max - global.text_font_char_min;
 global.text_font_json      = ds_map_create();
-
-var _surface_size         = argument[2];
-var _padding              = argument[3];
 
 global.text_font_surface_width  = _surface_size;
 global.text_font_surface_height = _surface_size;
@@ -69,3 +69,9 @@ surface_reset_target();
 
 global.text_font_sprite  = sprite_create_from_surface( _surface, 0, 0, global.text_font_surface_width, global.text_font_surface_height, false, false, 0, 0 );
 global.text_font_texture = sprite_get_texture( global.text_font_sprite, 0 );
+
+vertex_format_begin();
+vertex_format_add_position_3d();
+vertex_format_add_colour();
+vertex_format_add_textcoord();
+global.text_font_vertex_format = vertex_format_end();

@@ -60,10 +60,8 @@
   <rooms name="rooms">
     <room>rooms\rm_main</room>
   </rooms>
-  <constants number="12">
+  <constants number="10">
     <constant name="DEFAULT">""</constant>
-    <constant name="fa_center_left">3</constant>
-    <constant name="fa_center_right">4</constant>
     <constant name="text_no_fade">0</constant>
     <constant name="text_fade">1</constant>
     <constant name="text_fade_per_char">2</constant>
