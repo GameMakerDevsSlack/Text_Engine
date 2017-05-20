@@ -1,0 +1,126 @@
+Converting GML script : ${project_dir}\scripts\text_is_visible\text_is_visible.gml
+Converted description : /// @description text_is_visible( json )/// @function text_is_visible
+/// @param  json
+
+Converting GML script : ${project_dir}\scripts\text_is_invisible\text_is_invisible.gml
+Converted description : /// @description text_is_invisible( json )/// @function text_is_invisible
+/// @param  json
+
+Converting GML script : ${project_dir}\scripts\text_scrollbox_create\text_scrollbox_create.gml
+Converted description : /// @description text_scrollbox_create( width, height, scrollbar width, scrollbar height, colour )/// @function text_scrollbox_create
+/// @param  width
+/// @param  height
+/// @param  scrollbar width
+/// @param  scrollbar height
+/// @param  colour
+
+Converting GML script : ${project_dir}\scripts\text_system_init\text_system_init.gml
+Converted description : /// @description text_system_init( char min, char max, surface size, padding, font, [font]... )/// @function text_system_init
+/// @param  char min
+/// @param  char max
+/// @param  surface size
+/// @param  padding
+/// @param  font
+/// @param  [font]...
+
+Converting GML script : ${project_dir}\scripts\text_scrollbox_step\text_scrollbox_step.gml
+Converted description : /// @description text_scrollbox_step( x, y, scrollbox json, text json, mouse x, mouse y, destroy if invisible )/// @function text_scrollbox_step
+/// @param  x
+/// @param  y
+/// @param  scrollbox json
+/// @param  text json
+/// @param  mouse x
+/// @param  mouse y
+/// @param  destroy if invisible
+
+Converting GML script : ${project_dir}\scripts\text_scrollbox_draw\text_scrollbox_draw.gml
+Converted description : /// @description text_scrollbox_draw( x, y, scrollbox json, text json )/// @function text_scrollbox_draw
+/// @param  x
+/// @param  y
+/// @param  scrollbox json
+/// @param  text json
+
+Converting GML script : ${project_dir}\scripts\string_to_colour\string_to_colour.gml
+Converted description : /// @description string_to_colour( name )/// @function string_to_colour
+/// @param  name
+
+Converting GML script : ${project_dir}\scripts\example_do_close\example_do_close.gml
+Converted description : /// @description example_do_close()/// @function example_do_close
+
+Converting GML script : ${project_dir}\scripts\example_do_bloop\example_do_bloop.gml
+Converted description : /// @description example_do_bloop()/// @function example_do_bloop
+
+Converting GML script : ${project_dir}\scripts\example_open_url\example_open_url.gml
+Converted description : /// @description example_open_url()/// @function example_open_url
+
+Converting GML script : ${project_dir}\scripts\text_scrollbox_destroy\text_scrollbox_destroy.gml
+Converted description : /// @description text_scrollbox_destroy( scrollbox json )/// @function text_scrollbox_destroy
+/// @param  scrollbox json
+
+Font fnt_default has been converted to font family Arial (Regular). Font has been regenerated, small inconsistencies may occur.
+Font fnt_verdana_32_bold has been converted to font family Arial (Bold). Font has been regenerated, small inconsistencies may occur.
+Font fnt_tnr_32 has been converted to font family Times New Roman (Regular). Font has been regenerated, small inconsistencies may occur.
+Font fnt_verdana_32 has been converted to font family Arial (Regular). Font has been regenerated, small inconsistencies may occur.
+Font fnt_consolas has been converted to font family Consolas (Bold). Font has been regenerated, small inconsistencies may occur.
+Converting GML script : ${project_dir}\objects\obj_text\Create_0.gml
+Converted description : /// @description Create
+
+Converting GML script : ${project_dir}\objects\obj_text\Destroy_0.gml
+Converted description : /// @description Destroy
+
+Converting GML script : ${project_dir}\objects\obj_text\Step_0.gml
+Converted description : /// @description Step
+
+Converting GML script : ${project_dir}\objects\obj_text\Other_5.gml
+Converted description : /// @description Room End
+
+Converting GML script : ${project_dir}\objects\obj_text\Draw_0.gml
+Converted description : /// @description Draw
+
+Converting GML script : ${project_dir}\scripts\text_step\text_step.gml
+Converted description : /// @description text_step( x, y, json, mouse x, mouse y, destroy if invisible )/// @function text_step
+/// @param  x
+/// @param  y
+/// @param  json
+/// @param  mouse x
+/// @param  mouse y
+/// @param  destroy if invisible
+
+Converting GML script : ${project_dir}\scripts\text_create\text_create.gml
+Converted description : /// @description text_create( string, default font, default colour, default halign, box width, line height, box halign, box valign )/// @function text_create
+/// @param  string
+/// @param  default font
+/// @param  default colour
+/// @param  default halign
+/// @param  box width
+/// @param  line height
+/// @param  box halign
+/// @param  box valign
+Converted string : line 34 : "\n" -> "\\n"
+
+Converting GML script : ${project_dir}\scripts\text_destroy\text_destroy.gml
+Converted description : /// @description text_destroy( json )/// @function text_destroy
+/// @param  json
+
+Converting GML script : ${project_dir}\scripts\text_do_outro\text_do_outro.gml
+Converted description : /// @description text_do_outro( json )/// @function text_do_outro
+/// @param  json
+
+Font fnt_tnr_32_italics has been converted to font family Times New Roman (Italic). Font has been regenerated, small inconsistencies may occur.
+Converting GML script : ${project_dir}\scripts\text_draw\text_draw.gml
+Converted description : /// @description text_draw( x, y, json, fade, smoothness )/// @function text_draw
+/// @param  x
+/// @param  y
+/// @param  json
+/// @param  fade
+/// @param  smoothness
+
+Converting GML script : ${project_dir}\scripts\text_test_for_click\text_test_for_click.gml
+Converted description : /// @description text_test_for_click( json, hyperlink name )/// @function text_test_for_click
+/// @param  json
+/// @param  hyperlink name
+
+macOS icon ${options_dir}\mac\icons\icon512.png written out as 32-bit.
+game speed set to 60
+added compatibility script draw/draw_enable_alphablend.gml
+added compatibility script draw/draw_set_colour_write_enable.gml

@@ -140,7 +140,10 @@ if ( test_mode == 2 ) {
     
     //This script returns &lt;noone&gt; when the text has fully faded out
     var _result = text_scrollbox_step( scrollbox_x, scrollbox_y, scrollbox, scrollbox_focus_text, mouse_x, mouse_y, false );
-    if ( _result &lt; 0 ) scrollbox_focus_text = outro_text_json;
+    if ( _result &lt; 0 ) {
+        introduction_text_json = noone;
+        scrollbox_focus_text = outro_text_json;
+    }
     
     if ( os_browser != browser_not_a_browser ) { //Callbacks don't work properly in HTML5 due to obfuscation :(
         if ( text_test_for_click( scrollbox_focus_text, "unique name"             ) ) example_do_bloop();

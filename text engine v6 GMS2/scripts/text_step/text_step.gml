@@ -1,4 +1,11 @@
-///text_step( x, y, json, mouse x, mouse y, destroy if invisible )
+/// @description text_step( x, y, json, mouse x, mouse y, destroy if invisible )
+/// @function text_step
+/// @param  x
+/// @param  y
+/// @param  json
+/// @param  mouse x
+/// @param  mouse y
+/// @param  destroy if invisible 
 //
 //  April 2017
 //  Juju Adams
