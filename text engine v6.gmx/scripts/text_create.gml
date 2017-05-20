@@ -20,7 +20,7 @@ var _intro_speed = argument8;
 var _outro_style = argument9;
 var _outro_speed = argument10;
 
-//Replace newlines with #
+//Replace newlines with single characters
 _str = string_replace_all( _str, chr(10)+chr(13), chr(13) );
 _str = string_replace_all( _str, chr(13)+chr(10), chr(13) );
 _str = string_replace_all( _str,         chr(10), chr(13) );
@@ -160,33 +160,39 @@ while( string_length( _str ) > 0 ) {
                 _skip = true;
                 _text_font      = _def_font;
                 _text_colour    = _def_colour;
-                _text_halign    = _def_halign;
-                _text_valign    = _def_valign;
                 _text_hyperlink = "";
                 if ( _line_map != noone ) _line_map[? "halign" ] = _text_halign;
                 draw_set_font( _text_font );
                 
+                
+                
             //The command is an alignment keyphrase... set the alignment for the line and force a newline if the previous had content
+            } else if ( _parameters[0] == "fa" ) {
+                
+                _skip = true;
+                _text_halign = _def_halign;
+                _text_valign = _def_valign;
+                if ( _line_map != noone ) _line_map[? "halign" ] = _text_halign;
+                
             } else if ( _parameters[0] == "fa_left" ) and ( _first_character ) {
                 
                 _text_halign = fa_left;
                 if ( _line_map != noone ) _line_map[? "halign" ] = _text_halign;
                 _substr = "";
-                //if ( ds_list_size( _line_list ) > 0 ) _force_newline = true;
                 
             } else if ( ( _parameters[0] == "fa_center" ) or ( _parameters[0] == "fa_centre" ) ) and ( _first_character ) {
                 
                 _text_halign = fa_center;
                 if ( _line_map != noone ) _line_map[? "halign" ] = _text_halign;
                 _substr = "";
-                //if ( ds_list_size( _line_list ) > 0 ) _force_newline = true;
                 
             } else if ( _parameters[0] == "fa_right" ) and ( _first_character ) {
                 
                 _text_halign = fa_right;
                 if ( _line_map != noone ) _line_map[? "halign" ] = _text_halign;
                 _substr = "";
-                //if ( ds_list_size( _line_list ) > 0 ) _force_newline = true;
+                
+                
                 
             //If the command is something else...
             } else {
@@ -344,10 +350,6 @@ while( string_length( _str ) > 0 ) {
         //If we've got a word with a hyperlink, add it to our list of hyperlink regions
         if ( _text_hyperlink != "" ) {
             var _region_map = ds_map_create();
-            /*_region_map[? "x"         ] = _map[? "x"         ];
-            _region_map[? "y"         ] = _map[? "y"         ] + _text_y;
-            _region_map[? "width"     ] = _map[? "width"     ];
-            _region_map[? "height"    ] = _map[? "height"    ];*/
             _region_map[? "hyperlink" ] = _text_hyperlink;
             _region_map[? "line"      ] = ds_list_size( _text_root_list )-1;
             _region_map[? "word"      ] = ds_list_size( _line_list );
@@ -509,14 +511,6 @@ if ( _def_valign == fa_top ) {
         _line_map[? "y" ] -= _textbox_height div 2;
     }
     
-    //Adjust hyperlink region positions
-    /*
-    for( var _i = 0; _i < _hyperlink_region_size; _i++ ) {
-        var _region_map = _hyperlink_regions_list[| _i ];
-        var _line_map = _text_root_list[| _region_map[? "line" ] ];
-        _region_map[? "y" ] -= _textbox_height div 2;
-    }
-    */
 } else if ( _def_valign == fa_bottom ) {
     
     _json[? "top" ]    = -_textbox_height;
@@ -528,14 +522,6 @@ if ( _def_valign == fa_top ) {
         _line_map[? "y" ] -= _textbox_height;
     }
     
-    //Adjust hyperlink region positions
-    /*
-    for( var _i = 0; _i < _hyperlink_region_size; _i++ ) {
-        var _region_map = _hyperlink_regions_list[| _i ];
-        var _line_map = _text_root_list[| _region_map[? "line" ] ];
-        _region_map[? "y" ] -= _textbox_height;
-    }
-    */
 }
 
 
@@ -664,88 +650,3 @@ _json[? "model"         ] = _model;
 _json[? "model indices" ] = _texture_char;
 
 return _json;
-
-
-
-
-/*
-//Horizontal justification
-if ( _def_halign == fa_left ) {
-    
-    _json[? "left" ]  = 0;
-    _json[? "right" ] = _textbox_width;
-    
-} else if ( _def_halign == fa_center ) {
-    
-    _json[? "left" ]  = -_textbox_width div 2;
-    _json[? "right" ] =  _textbox_width div 2;
-    
-    //Adjust word positions
-    for( var _i = 0; _i < _lines_size; _i++ ) {
-        var _line_map = _text_root_list[| _i ];
-        _line_map[? "x" ] -= _line_map[? "width" ] div 2;
-    }
-    
-    //Adjust hyperlink region positions
-    for( var _i = 0; _i < _hyperlink_region_size; _i++ ) {
-        var _region_map = _hyperlink_regions_list[| _i ];
-        var _line_map = _text_root_list[| _region_map[? "line" ] ];
-        _region_map[? "x" ] -= _line_map[? "width" ] div 2;
-    }
-    
-} else if ( _def_halign == fa_right ) {
-    
-    _json[? "left" ]  = -_textbox_width;
-    _json[? "right" ] = 0;
-    
-    //Adjust word positions
-    for( var _i = 0; _i < _lines_size; _i++ ) {
-        var _line_map = _text_root_list[| _i ];
-        _line_map[? "x" ] -= _line_map[? "width" ];
-    }
-    
-    //Adjust hyperlink region positions
-    for( var _i = 0; _i < _hyperlink_region_size; _i++ ) {
-        var _region_map = _hyperlink_regions_list[| _i ];
-        var _line_map = _text_root_list[| _region_map[? "line" ] ];
-        _region_map[? "x" ] -= _line_map[? "width" ];
-    }
-    
-} else if ( _def_halign == fa_center_left ) {
-    
-    _json[? "left" ]  = -_textbox_width div 2;
-    _json[? "right" ] =  _textbox_width div 2;
-    
-    //Adjust word positions
-    for( var _i = 0; _i < _lines_size; _i++ ) {
-        var _line_map = _text_root_list[| _i ];
-        _line_map[? "x" ] -= _textbox_width div 2;
-    }
-    
-    //Adjust hyperlink region positions
-    for( var _i = 0; _i < _hyperlink_region_size; _i++ ) {
-        var _region_map = _hyperlink_regions_list[| _i ];
-        var _line_map = _text_root_list[| _region_map[? "line" ] ];
-        _region_map[? "x" ] -= _textbox_width div 2;
-    }
-    
-} else if ( _def_halign == fa_center_right ) {
-    
-    _json[? "left" ]  = -_textbox_width div 2;
-    _json[? "right" ] =  _textbox_width div 2;
-    
-    //Adjust word positions
-    for( var _i = 0; _i < _lines_size; _i++ ) {
-        var _line_map = _text_root_list[| _i ];
-        _line_map[? "x" ] -= _line_map[? "width" ] - _textbox_width div 2;
-    }
-    
-    //Adjust hyperlink region positions
-    for( var _i = 0; _i < _hyperlink_region_size; _i++ ) {
-        var _region_map = _hyperlink_regions_list[| _i ];
-        var _line_map = _text_root_list[| _region_map[? "line" ] ];
-        _region_map[? "x" ] -= _line_map[? "width" ] - _textbox_width div 2;
-    }
-    
-}
-*/

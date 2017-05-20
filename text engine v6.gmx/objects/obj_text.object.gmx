@@ -50,8 +50,8 @@ lorem_ipsum_json = text_create( lorem_ipsum_string, 800, 20, fa_left, fa_top, fn
 var _str = "This is text.
 [$9A23C1]This text is coloured with a hex code.
 [fa_right]This is justified right.
-[][fnt_tnr_32]This is[] text [c_blue]in [fnt_verdana_32_bold]various [c_red][fnt_tnr_32]styles.[]
-This is a [fnt_verdana_32_bold]line of text[] that is much longer than the (800 pixel) [fnt_verdana_32_bold]maximum width[].
+[fa_centre][fnt_tnr_32]This is[] text [c_blue]in [fnt_verdana_32_bold]various [c_red][fnt_tnr_32]styles.[]
+[fa]This is a [fnt_verdana_32_bold]line of text[] that is much longer than the (800 pixel) [fnt_verdana_32_bold]maximum width[].
 [fnt_tnr_32_italics]It is also possible to insert images [link|unique name|example_do_bloop][spr_test][/link].[]
 [fa_right][link|another unique name|example_do_close]Click here to destroy this text[/link] [fnt_tnr_32](or on the grumpy pug [link|yet another unique name|example_do_close][spr_test_2][/link])[].";
 introduction_text_json = text_create( _str, 800, 100, fa_left, fa_top, fnt_verdana_32, c_white, text_no_fade, 0.1, text_no_fade, 0.2 );
